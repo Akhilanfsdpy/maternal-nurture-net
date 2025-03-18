@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, Activity, Clock, Droplets, Calendar, PlusCircle, Pencil, Pills, Utensils, Dumbbell } from 'lucide-react';
+import { Heart, Activity, Clock, Droplets, Calendar, PlusCircle, Pencil, Pill, Utensils, Dumbbell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,21 +9,18 @@ import HealthMetric from '@/components/HealthMetric';
 import Chatbot from '@/components/Chatbot';
 import { cn } from '@/lib/utils';
 
-// Sample symptoms data
 const symptoms = [
   { id: 1, name: 'Nausea', severity: 'Mild', time: '2 days ago', status: 'improving' },
   { id: 2, name: 'Fatigue', severity: 'Moderate', time: 'Today', status: 'steady' },
   { id: 3, name: 'Backache', severity: 'Mild', time: 'Yesterday', status: 'improving' },
 ];
 
-// Sample medication data
 const medications = [
   { id: 1, name: 'Prenatal Vitamins', dosage: '1 tablet', frequency: 'Daily', schedule: 'Morning' },
   { id: 2, name: 'Iron Supplement', dosage: '1 tablet', frequency: 'Daily', schedule: 'After meal' },
   { id: 3, name: 'Calcium', dosage: '1 tablet', frequency: 'Twice daily', schedule: 'Morning/Evening' },
 ];
 
-// Sample nutrition data
 const nutritionData = [
   { name: 'Protein', value: 85, target: 70, unit: 'g' },
   { name: 'Iron', value: 18, target: 27, unit: 'mg' },
@@ -32,7 +29,6 @@ const nutritionData = [
   { name: 'Water', value: 2.4, target: 3, unit: 'L' },
 ];
 
-// Sample appointments data
 const appointments = [
   { 
     id: 1, 
@@ -170,13 +166,12 @@ const MaternalHealth: React.FC = () => {
               </TabsList>
             </div>
 
-            {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card className="shadow-sm">
                   <CardHeader>
                     <CardTitle className="flex items-center">
-                      <Pills className="mr-2 h-5 w-5 text-health-blue" />
+                      <Pill className="mr-2 h-5 w-5 text-health-blue" />
                       Medications & Supplements
                     </CardTitle>
                   </CardHeader>
@@ -372,7 +367,6 @@ const MaternalHealth: React.FC = () => {
               </div>
             </TabsContent>
 
-            {/* Other tabs would go here */}
             <TabsContent value="symptoms">
               <Card>
                 <CardHeader>
@@ -416,3 +410,4 @@ const MaternalHealth: React.FC = () => {
 };
 
 export default MaternalHealth;
+
