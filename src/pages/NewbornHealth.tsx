@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Baby, Thermometer, Scale, Clock, Calendar, PlusCircle, Activity, Utensils, Milestone, Check } from 'lucide-react';
+import { Baby, Thermometer, Scale, Clock, Calendar, PlusCircle, Activity, Utensils, Milestone, Check, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,6 +8,7 @@ import Header from '@/components/Header';
 import HealthMetric from '@/components/HealthMetric';
 import Chatbot from '@/components/Chatbot';
 import { cn } from '@/lib/utils';
+import DocumentsTabContent from '@/components/newborn-health/DocumentsTabContent';
 
 // Sample growth data
 const growthData = {
@@ -234,11 +234,12 @@ const NewbornHealth: React.FC = () => {
             className="space-y-6"
           >
             <div className="bg-white rounded-lg p-1 shadow-sm inline-block">
-              <TabsList className="grid grid-cols-4 w-[500px]">
+              <TabsList className="grid grid-cols-5 w-[625px]">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="feeding">Feeding</TabsTrigger>
                 <TabsTrigger value="milestones">Milestones</TabsTrigger>
                 <TabsTrigger value="vaccinations">Vaccinations</TabsTrigger>
+                <TabsTrigger value="documents">Documents</TabsTrigger>
               </TabsList>
             </div>
 
@@ -493,6 +494,11 @@ const NewbornHealth: React.FC = () => {
                   </Button>
                 </CardFooter>
               </Card>
+            </TabsContent>
+
+            {/* Documents Tab */}
+            <TabsContent value="documents">
+              <DocumentsTabContent />
             </TabsContent>
           </Tabs>
         </div>
