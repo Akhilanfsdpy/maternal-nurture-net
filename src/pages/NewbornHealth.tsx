@@ -12,6 +12,7 @@ import FeedingTabContent from '@/components/newborn-health/FeedingTabContent';
 import MilestonesTabContent from '@/components/newborn-health/MilestonesTabContent';
 import VaccinationsTabContent from '@/components/newborn-health/VaccinationsTabContent';
 import DocumentsTabContent from '@/components/newborn-health/DocumentsTabContent';
+import HealthCheckupScheduler from '@/components/newborn-health/HealthCheckupScheduler';
 
 // Sample growth data
 const growthData = {
@@ -167,6 +168,11 @@ const NewbornHealth: React.FC = () => {
           </div>
 
           <GrowthMetrics growthData={growthData} />
+
+          {/* New Health Checkup Scheduler Component */}
+          <div className="mb-8">
+            <HealthCheckupScheduler />
+          </div>
 
           <Tabs
             defaultValue="overview"
