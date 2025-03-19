@@ -29,3 +29,23 @@ export interface Vaccination {
   nextDose: string;
   lastDate: string;
 }
+
+export interface BirthCertificate {
+  childId: string;
+  childName: string;
+  dateOfBirth: string;
+  timeOfBirth: string;
+  gender: string;
+  weight: string;
+  height: string;
+  apgarScore: string;
+  parentName1: string;
+  parentName2: string | null;
+  address: string;
+  contactNumber: string;
+  hospitalName: string;
+  doctorName: string;
+  certificateId: string;
+  issueDate: string;
+  issuedBy: string;
+}

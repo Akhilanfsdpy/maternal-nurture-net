@@ -6,6 +6,7 @@ import FeedingTabContent from '@/components/newborn-health/FeedingTabContent';
 import MilestonesTabContent from '@/components/newborn-health/MilestonesTabContent';
 import VaccinationsTabContent from '@/components/newborn-health/VaccinationsTabContent';
 import DocumentsTabContent from '@/components/newborn-health/DocumentsTabContent';
+import BirthCertificateTabContent from '@/components/newborn-health/BirthCertificateTabContent';
 import { FeedingData, Milestone, Vaccination } from '@/types/newbornHealth';
 
 interface HealthTabsProps {
@@ -30,13 +31,14 @@ const HealthTabs: React.FC<HealthTabsProps> = ({
       onValueChange={setActiveTab}
       className="space-y-6"
     >
-      <div className="bg-white rounded-lg p-1 shadow-sm inline-block">
-        <TabsList className="grid grid-cols-5 w-[625px]">
+      <div className="bg-white rounded-lg p-1 shadow-sm inline-block overflow-x-auto">
+        <TabsList className="grid grid-cols-6 w-[750px]">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="feeding">Feeding</TabsTrigger>
           <TabsTrigger value="milestones">Milestones</TabsTrigger>
           <TabsTrigger value="vaccinations">Vaccinations</TabsTrigger>
           <TabsTrigger value="documents">Documents</TabsTrigger>
+          <TabsTrigger value="birthcertificate">Birth Certificate</TabsTrigger>
         </TabsList>
       </div>
 
@@ -59,6 +61,10 @@ const HealthTabs: React.FC<HealthTabsProps> = ({
 
       <TabsContent value="documents">
         <DocumentsTabContent />
+      </TabsContent>
+      
+      <TabsContent value="birthcertificate">
+        <BirthCertificateTabContent />
       </TabsContent>
     </Tabs>
   );
