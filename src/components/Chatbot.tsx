@@ -1,11 +1,13 @@
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Send, X, MessageCircle, Video, Paperclip, Bot, BotMessageSquare, Mic, MicOff, Calendar } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, BotMessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import { chatbotResponses } from '@/data/healthCheckupData';
+import MessageList from './chatbot/MessageList';
+import MessageInput from './chatbot/MessageInput';
+import ActionButtons from './chatbot/ActionButtons';
+import { categorizeInput, getResponse } from './chatbot/chatbotUtils';
 
 interface Message {
   id: number;
@@ -20,81 +22,20 @@ interface ChatbotProps {
 
 const Chatbot: React.FC<ChatbotProps> = ({ embedded = false }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
     { id: 1, text: "Hello! I'm your health assistant. How can I help you today?", isUser: false },
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
   const toggleChatbot = () => {
     setIsOpen(!isOpen);
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  // Determine the response category based on user input
-  const categorizeInput = (input: string): keyof typeof chatbotResponses => {
-    const inputLower = input.toLowerCase();
-    
-    if (inputLower.includes('growth') || inputLower.includes('weight') || inputLower.includes('height') || 
-        inputLower.includes('tall') || inputLower.includes('big') || inputLower.includes('measure')) {
-      return 'growth';
-    } 
-    else if (inputLower.includes('feed') || inputLower.includes('eat') || inputLower.includes('formula') || 
-             inputLower.includes('breastfeed') || inputLower.includes('hungry') || inputLower.includes('milk')) {
-      return 'feeding';
-    } 
-    else if (inputLower.includes('sleep') || inputLower.includes('nap') || inputLower.includes('bed') || 
-             inputLower.includes('night') || inputLower.includes('awake') || inputLower.includes('tired')) {
-      return 'sleep';
-    } 
-    else if (inputLower.includes('milestone') || inputLower.includes('development') || inputLower.includes('crawl') || 
-             inputLower.includes('sit') || inputLower.includes('roll') || inputLower.includes('walk') || 
-             inputLower.includes('talk') || inputLower.includes('smile')) {
-      return 'milestones';
-    }
-    else if (inputLower.includes('symptom') || inputLower.includes('sick') || inputLower.includes('fever') || 
-             inputLower.includes('rash') || inputLower.includes('diarrhea') || inputLower.includes('cough') || 
-             inputLower.includes('cold') || inputLower.includes('vomit') || inputLower.includes('pain')) {
-      return 'symptoms';
-    }
-    else if (inputLower.includes('doctor') || inputLower.includes('appointment') || inputLower.includes('visit') || 
-             inputLower.includes('checkup') || inputLower.includes('schedule') || inputLower.includes('hospital')) {
-      return 'appointment';
-    }
-    else if (inputLower.includes('emergency') || inputLower.includes('urgent') || inputLower.includes('help') || 
-             inputLower.includes('serious') || inputLower.includes('immediately') || inputLower.includes('critical')) {
-      return 'emergency';
-    } 
-    else {
-      return 'default';
-    }
-  };
-
-  // Get a random response from the appropriate category
-  const getResponse = (category: keyof typeof chatbotResponses): string => {
-    const responses = chatbotResponses[category];
-    const randomIndex = Math.floor(Math.random() * responses.length);
-    return responses[randomIndex];
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!input.trim()) return;
-    
+  const handleSubmit = (input: string) => {
     const newUserMessage = { id: messages.length + 1, text: input, isUser: true };
     setMessages([...messages, newUserMessage]);
-    setInput('');
     setIsTyping(true);
 
     // Simulate a response after a short delay
@@ -186,7 +127,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ embedded = false }) => {
         {!embedded && (
           <div className="p-4 border-b flex items-center justify-between bg-gradient-to-r from-health-blue to-health-light-blue text-white">
             <div className="flex items-center space-x-2">
-              <Bot className="h-5 w-5" />
+              <BotMessageSquare className="h-5 w-5" />
               <h3 className="font-medium">AI Health Assistant</h3>
             </div>
             <Button
@@ -202,98 +143,23 @@ const Chatbot: React.FC<ChatbotProps> = ({ embedded = false }) => {
 
         {/* Messages */}
         <div className={cn("flex-1 p-4 overflow-y-auto", embedded ? "h-[280px]" : "")}>
-          <div className="space-y-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={cn(
-                  'max-w-[80%] p-3 rounded-2xl animate-fade-in',
-                  message.isUser
-                    ? 'bg-primary text-white ml-auto rounded-tr-none'
-                    : 'bg-gray-100 text-gray-800 rounded-tl-none'
-                )}
-              >
-                <p className="text-sm">{message.text}</p>
-              </div>
-            ))}
-            {isTyping && (
-              <div className="max-w-[80%] p-3 rounded-2xl bg-gray-100 text-gray-800 rounded-tl-none">
-                <div className="flex space-x-1">
-                  <div className="h-2 w-2 bg-gray-400 rounded-full animate-pulse" />
-                  <div className="h-2 w-2 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }} />
-                  <div className="h-2 w-2 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }} />
-                </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
+          <MessageList 
+            messages={messages} 
+            isTyping={isTyping} 
+          />
         </div>
 
         {/* Additional features */}
-        <div className="px-3 py-2 border-t border-b flex justify-between">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="text-health-blue"
-            onClick={handleVideoCall}
-          >
-            <Video className="h-4 w-4 mr-1" />
-            <span className="text-xs">Video</span>
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="text-health-blue"
-            onClick={toggleVoiceInput}
-          >
-            {isRecording ? (
-              <MicOff className="h-4 w-4 mr-1 text-red-500" />
-            ) : (
-              <Mic className="h-4 w-4 mr-1" />
-            )}
-            <span className="text-xs">Voice</span>
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="text-health-blue"
-            onClick={handleAttachment}
-          >
-            <Paperclip className="h-4 w-4 mr-1" />
-            <span className="text-xs">Upload</span>
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="text-health-blue"
-            onClick={handleScheduleAppointment}
-          >
-            <Calendar className="h-4 w-4 mr-1" />
-            <span className="text-xs">Schedule</span>
-          </Button>
-        </div>
+        <ActionButtons 
+          isRecording={isRecording}
+          toggleVoiceInput={toggleVoiceInput}
+          handleVideoCall={handleVideoCall}
+          handleAttachment={handleAttachment}
+          handleScheduleAppointment={handleScheduleAppointment}
+        />
 
         {/* Input */}
-        <form onSubmit={handleSubmit} className="p-4 border-t flex items-center space-x-2">
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message..."
-            className="flex-1 py-2 text-sm"
-            autoComplete="off"
-          />
-          <Button
-            type="submit"
-            size="icon"
-            disabled={!input.trim()}
-            className={cn(
-              'rounded-full h-9 w-9',
-              'bg-gradient-to-r from-health-blue to-health-light-blue hover:shadow-md'
-            )}
-          >
-            <Send className="h-4 w-4 text-white" />
-          </Button>
-        </form>
+        <MessageInput onSendMessage={handleSubmit} />
       </div>
     </>
   );
