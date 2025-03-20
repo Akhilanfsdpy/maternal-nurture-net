@@ -7,6 +7,7 @@ import HealthCheckupScheduler from '@/components/newborn-health/HealthCheckupSch
 import PageHeader from '@/components/newborn-health/PageHeader';
 import HealthMetricsDisplay from '@/components/newborn-health/HealthMetricsDisplay';
 import HealthTabs from '@/components/newborn-health/HealthTabs';
+import GrowthTracking from '@/components/newborn-health/GrowthTracking';
 import { growthData, feedingData, milestones, vaccinations } from '@/data/newbornHealthData';
 
 const NewbornHealth: React.FC = () => {
@@ -22,6 +23,7 @@ const NewbornHealth: React.FC = () => {
           <PageHeader />
           <HealthMetricsDisplay />
           <GrowthMetrics growthData={growthData} />
+          <GrowthTracking />
           <HealthCheckupScheduler />
           <HealthTabs 
             activeTab={activeTab}
