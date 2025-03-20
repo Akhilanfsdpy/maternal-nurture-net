@@ -1,34 +1,19 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { 
-  Activity, Baby, FileText, Apple, Users, BookOpen,
-  Icon as LucideIcon
-} from 'lucide-react';
 
 interface FeatureCardProps {
   title: string;
   description: string;
-  icon: string;
-  color?: string;
+  icon: React.ReactNode;
   className?: string;
   delay?: number;
 }
-
-const iconMap: Record<string, React.ReactNode> = {
-  activity: <Activity className="h-6 w-6 text-health-blue" />,
-  baby: <Baby className="h-6 w-6 text-health-pink" />,
-  fileText: <FileText className="h-6 w-6 text-purple-500" />,
-  apple: <Apple className="h-6 w-6 text-green-500" />,
-  users: <Users className="h-6 w-6 text-orange-500" />,
-  bookOpen: <BookOpen className="h-6 w-6 text-indigo-500" />
-};
 
 const FeatureCard: React.FC<FeatureCardProps> = ({
   title,
   description,
   icon,
-  color,
   className,
   delay = 0
 }) => {
@@ -71,7 +56,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
       )}
     >
       <div className="p-3 rounded-lg bg-gradient-to-br from-health-blue/10 to-health-light-blue/10 mb-4">
-        {iconMap[icon]}
+        {icon}
       </div>
       <h3 className="text-xl font-semibold mb-2 text-gray-900">{title}</h3>
       <p className="text-gray-600 leading-relaxed">{description}</p>

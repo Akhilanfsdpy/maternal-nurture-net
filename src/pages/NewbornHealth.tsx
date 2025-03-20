@@ -7,20 +7,14 @@ import HealthCheckupScheduler from '@/components/newborn-health/HealthCheckupSch
 import PageHeader from '@/components/newborn-health/PageHeader';
 import HealthMetricsDisplay from '@/components/newborn-health/HealthMetricsDisplay';
 import HealthTabs from '@/components/newborn-health/HealthTabs';
-import GrowthTracking from '@/components/newborn-health/GrowthTracking';
 import { growthData, feedingData, milestones, vaccinations } from '@/data/newbornHealthData';
 
 const NewbornHealth: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+      <Header />
       <Chatbot />
       
       <main className="pt-28 pb-20 px-6">
@@ -28,7 +22,6 @@ const NewbornHealth: React.FC = () => {
           <PageHeader />
           <HealthMetricsDisplay />
           <GrowthMetrics growthData={growthData} />
-          <GrowthTracking />
           <HealthCheckupScheduler />
           <HealthTabs 
             activeTab={activeTab}

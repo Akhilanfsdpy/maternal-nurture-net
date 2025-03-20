@@ -7,7 +7,6 @@ import MilestonesTabContent from '@/components/newborn-health/MilestonesTabConte
 import VaccinationsTabContent from '@/components/newborn-health/VaccinationsTabContent';
 import DocumentsTabContent from '@/components/newborn-health/DocumentsTabContent';
 import BirthCertificateTabContent from '@/components/newborn-health/BirthCertificateTabContent';
-import HealthCheckupTabContent from '@/components/newborn-health/HealthCheckupTabContent';
 import { FeedingData, Milestone, Vaccination } from '@/types/newbornHealth';
 
 interface HealthTabsProps {
@@ -33,12 +32,11 @@ const HealthTabs: React.FC<HealthTabsProps> = ({
       className="space-y-6"
     >
       <div className="bg-white rounded-lg p-1 shadow-sm inline-block overflow-x-auto">
-        <TabsList className="grid grid-cols-7 w-[875px]">
+        <TabsList className="grid grid-cols-6 w-[750px]">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="feeding">Feeding</TabsTrigger>
           <TabsTrigger value="milestones">Milestones</TabsTrigger>
           <TabsTrigger value="vaccinations">Vaccinations</TabsTrigger>
-          <TabsTrigger value="healthcheckup">Health Checkup</TabsTrigger>
           <TabsTrigger value="documents">Documents</TabsTrigger>
           <TabsTrigger value="birthcertificate">Birth Certificate</TabsTrigger>
         </TabsList>
@@ -59,10 +57,6 @@ const HealthTabs: React.FC<HealthTabsProps> = ({
 
       <TabsContent value="vaccinations">
         <VaccinationsTabContent vaccinations={vaccinations} />
-      </TabsContent>
-
-      <TabsContent value="healthcheckup">
-        <HealthCheckupTabContent />
       </TabsContent>
 
       <TabsContent value="documents">
