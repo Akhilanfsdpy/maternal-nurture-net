@@ -1,15 +1,19 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Menu, MenuIcon, X } from 'lucide-react';
 
 interface HeaderProps {
-  isMenuOpen: boolean;
-  toggleMenu: () => void;
+  isMenuOpen?: boolean;
+  toggleMenu?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
+const Header: React.FC<HeaderProps> = ({ 
+  isMenuOpen = false, 
+  toggleMenu = () => {} 
+}) => {
   const { toast } = useToast();
 
   const handleLogout = () => {

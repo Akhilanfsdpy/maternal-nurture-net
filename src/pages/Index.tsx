@@ -1,187 +1,118 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Baby, LineChart, Bell, Lock, Hospital } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/Header';
 import FeatureCard from '@/components/FeatureCard';
-import Chatbot from '@/components/Chatbot';
-import { cn } from '@/lib/utils';
 
 const Index: React.FC = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <div className="min-h-screen">
-      <Header />
-      <Chatbot />
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      <Header isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
       
-      {/* Hero Section */}
-      <section className="pt-28 pb-20 px-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-health-blue/5 to-health-light-blue/10 -z-10" />
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center">
-          <div className="lg:w-1/2 mb-12 lg:mb-0 animate-fade-in">
-            <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-              Introducing MaternaLink
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-gradient">
-              Maternal & Newborn Health Monitoring System
+      <main className="pt-24 pb-20 px-6">
+        <section className="max-w-6xl mx-auto py-16">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-health-blue to-health-pink bg-clip-text text-transparent">
+              Empowering Maternal & Newborn Health
             </h1>
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-xl">
-              An integrated platform that combines IoT devices, AI analytics, and secure health data storage to ensure the wellbeing of mothers and newborns.
+            <p className="text-xl text-gray-600 mb-8">
+              Comprehensive digital solutions for mothers and healthcare providers to monitor, track, and enhance maternal and newborn well-being.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-health-blue to-health-light-blue hover:shadow-lg transition-shadow duration-300 text-white rounded-lg"
-              >
-                Get Started
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button className="bg-gradient-to-r from-health-blue to-health-pink text-white" size="lg" asChild>
+                <Link to="/dashboard">Get Started</Link>
               </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="border-health-light-blue text-health-blue hover:bg-health-light-blue/10 rounded-lg"
-              >
+              <Button variant="outline" size="lg">
                 Learn More
               </Button>
             </div>
           </div>
-          <div className="lg:w-1/2 relative animate-fade-in">
-            <div className="relative w-full aspect-square max-w-md mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-br from-health-blue/20 to-health-light-blue/20 rounded-full animate-pulse-subtle" style={{ animationDelay: '0.5s' }} />
-              <div className="absolute inset-4 bg-gradient-to-br from-health-blue/30 to-health-light-blue/30 rounded-full animate-pulse-subtle" style={{ animationDelay: '1s' }} />
-              <div className="absolute inset-8 bg-gradient-to-br from-health-blue/40 to-health-light-blue/40 rounded-full animate-pulse-subtle" style={{ animationDelay: '1.5s' }} />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="glass-panel p-8 rounded-full shadow-lg">
-                  <Heart className="h-24 w-24 text-health-blue" />
-                </div>
-              </div>
-              {/* Floating elements */}
-              <div className="absolute top-16 -right-4 glass-panel p-3 rounded-xl shadow-md animate-pulse-subtle">
-                <LineChart className="h-8 w-8 text-health-light-blue" />
-              </div>
-              <div className="absolute bottom-16 -left-4 glass-panel p-3 rounded-xl shadow-md animate-pulse-subtle" style={{ animationDelay: '2s' }}>
-                <Baby className="h-8 w-8 text-health-pink" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 px-6 bg-gradient-to-b from-white to-health-cream/20">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Comprehensive Health Monitoring</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Our platform provides end-to-end monitoring solutions for maternal and newborn health, from pregnancy through early childhood.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <FeatureCard
-              title="Maternal Health Tracking"
-              description="Monitor vital signs, track symptoms, and receive personalized insights throughout pregnancy."
-              icon={<Heart className="h-6 w-6 text-health-blue" />}
-              delay={0}
-            />
-            <FeatureCard
-              title="Newborn Monitoring"
-              description="Track your baby's growth, development milestones, and health metrics from birth."
-              icon={<Baby className="h-6 w-6 text-health-pink" />}
-              delay={100}
-            />
-            <FeatureCard
-              title="AI-Powered Analytics"
-              description="Receive early risk detection and personalized health recommendations based on your data."
-              icon={<LineChart className="h-6 w-6 text-health-light-blue" />}
-              delay={200}
-            />
-            <FeatureCard
-              title="Real-time Alerts"
-              description="Get immediate notifications for critical health changes or upcoming appointments."
-              icon={<Bell className="h-6 w-6 text-health-blue" />}
-              delay={300}
-            />
-            <FeatureCard
-              title="Secure Data Storage"
-              description="Your health data is encrypted and securely stored with the highest privacy standards."
-              icon={<Lock className="h-6 w-6 text-health-light-blue" />}
-              delay={400}
-            />
-            <FeatureCard
-              title="Healthcare Integration"
-              description="Seamlessly share data with your healthcare providers for better coordinated care."
-              icon={<Hospital className="h-6 w-6 text-health-blue" />}
-              delay={500}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-health-blue to-health-light-blue">
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">Ready to Start Your Health Journey?</h2>
-          <p className="text-lg text-white/90 mb-8 max-w-3xl mx-auto">
-            Join thousands of families using MaternaLink to ensure better health outcomes for mothers and newborns.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg" 
-              variant="secondary"
-              className="bg-white text-health-blue hover:bg-white/90"
-            >
-              Get Started
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="border-white text-white hover:bg-white/10"
-            >
-              Request Demo
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-6 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="md:col-span-2">
-              <Link to="/" className="flex items-center space-x-2 mb-4">
-                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-health-blue to-health-light-blue flex items-center justify-center">
-                  <Heart className="h-4 w-4 text-white" />
-                </div>
-                <span className="text-xl font-semibold">MaternaLink</span>
-              </Link>
-              <p className="text-gray-600 mb-4 max-w-md">
-                An integrated maternal & newborn health monitoring system designed to ensure the wellbeing of mothers and babies.
-              </p>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Features</h3>
-              <ul className="space-y-2">
-                <li><Link to="/dashboard" className="text-gray-600 hover:text-health-blue">Dashboard</Link></li>
-                <li><Link to="/maternal-health" className="text-gray-600 hover:text-health-blue">Maternal Health</Link></li>
-                <li><Link to="/newborn-health" className="text-gray-600 hover:text-health-blue">Newborn Health</Link></li>
-                <li><Link to="/chat" className="text-gray-600 hover:text-health-blue">Chat Assistant</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Company</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-600 hover:text-health-blue">About Us</a></li>
-                <li><a href="#" className="text-gray-600 hover:text-health-blue">Contact</a></li>
-                <li><a href="#" className="text-gray-600 hover:text-health-blue">Privacy Policy</a></li>
-                <li><a href="#" className="text-gray-600 hover:text-health-blue">Terms of Service</a></li>
-              </ul>
-            </div>
-          </div>
           
-          <div className="mt-12 pt-8 border-t border-gray-200 text-center text-gray-500 text-sm">
-            &copy; {new Date().getFullYear()} MaternaLink. All rights reserved.
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <FeatureCard 
+              title="Pregnancy Tracking"
+              description="Track maternal health metrics, appointments, and important milestones during pregnancy."
+              icon="activity"
+              color="blue"
+            />
+            <FeatureCard 
+              title="Newborn Care"
+              description="Monitor your baby's growth, vaccinations, and developmental milestones with expert guidance."
+              icon="baby"
+              color="pink"
+            />
+            <FeatureCard 
+              title="Health Records"
+              description="Securely store and access medical records, prescriptions, and test results in one place."
+              icon="fileText"
+              color="purple"
+            />
+            <FeatureCard 
+              title="Nutritional Guidance"
+              description="Get personalized diet plans and nutritional advice for optimal health during pregnancy and postpartum."
+              icon="apple"
+              color="green"
+            />
+            <FeatureCard 
+              title="Expert Support"
+              description="Connect with healthcare professionals for timely advice and support through secure messaging."
+              icon="users"
+              color="orange"
+            />
+            <FeatureCard 
+              title="Educational Resources"
+              description="Access a library of verified articles, videos, and courses on maternal and newborn health."
+              icon="bookOpen"
+              color="indigo"
+            />
+          </div>
+        </section>
+      </main>
+      
+      <footer className="bg-white py-12 border-t">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <h3 className="font-bold text-lg mb-4">Maternal Nurture Net</h3>
+              <p className="text-gray-600">Comprehensive digital solutions for maternal and newborn health management.</p>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4">Features</h4>
+              <ul className="space-y-2 text-gray-600">
+                <li>Pregnancy Tracking</li>
+                <li>Newborn Care</li>
+                <li>Health Records</li>
+                <li>Nutritional Guidance</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4">Resources</h4>
+              <ul className="space-y-2 text-gray-600">
+                <li>Help Center</li>
+                <li>Blog</li>
+                <li>Community</li>
+                <li>Contact Us</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4">Legal</h4>
+              <ul className="space-y-2 text-gray-600">
+                <li>Privacy Policy</li>
+                <li>Terms of Service</li>
+                <li>Cookie Policy</li>
+                <li>HIPAA Compliance</li>
+              </ul>
+            </div>
+          </div>
+          <div className="pt-8 border-t text-center text-gray-600">
+            <p>© {new Date().getFullYear()} Maternal Nurture Net. All rights reserved.</p>
           </div>
         </div>
       </footer>

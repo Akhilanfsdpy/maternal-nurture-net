@@ -12,10 +12,15 @@ import { growthData, feedingData, milestones, vaccinations } from '@/data/newbor
 
 const NewbornHealth: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <Header isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
       <Chatbot />
       
       <main className="pt-28 pb-20 px-6">
