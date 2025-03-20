@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -40,37 +39,31 @@ const Index: React.FC = () => {
               title="Pregnancy Tracking"
               description="Track maternal health metrics, appointments, and important milestones during pregnancy."
               icon="activity"
-              color="blue"
             />
             <FeatureCard 
               title="Newborn Care"
               description="Monitor your baby's growth, vaccinations, and developmental milestones with expert guidance."
               icon="baby"
-              color="pink"
             />
             <FeatureCard 
               title="Health Records"
               description="Securely store and access medical records, prescriptions, and test results in one place."
               icon="fileText"
-              color="purple"
             />
             <FeatureCard 
               title="Nutritional Guidance"
               description="Get personalized diet plans and nutritional advice for optimal health during pregnancy and postpartum."
               icon="apple"
-              color="green"
             />
             <FeatureCard 
               title="Expert Support"
               description="Connect with healthcare professionals for timely advice and support through secure messaging."
               icon="users"
-              color="orange"
             />
             <FeatureCard 
               title="Educational Resources"
               description="Access a library of verified articles, videos, and courses on maternal and newborn health."
               icon="bookOpen"
-              color="indigo"
             />
           </div>
         </section>
