@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
+import { Label } from '@/components/ui/label';
 
 interface ScannedMedication {
   name: string;
@@ -79,13 +80,13 @@ const PrescriptionScanner: React.FC = () => {
             <p className="text-xs text-gray-500 mb-4">
               Supported formats: JPG, PNG, PDF
             </p>
-            <Button 
-              as="label" 
-              htmlFor="prescription-upload"
-              variant="outline"
-              className="cursor-pointer"
-            >
-              Select Image
+            <div>
+              <Label 
+                htmlFor="prescription-upload"
+                className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+              >
+                Select Image
+              </Label>
               <input
                 id="prescription-upload"
                 type="file"
@@ -93,7 +94,7 @@ const PrescriptionScanner: React.FC = () => {
                 className="hidden"
                 onChange={handleFileChange}
               />
-            </Button>
+            </div>
           </div>
         ) : (
           <>
