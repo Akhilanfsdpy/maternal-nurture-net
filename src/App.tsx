@@ -9,7 +9,6 @@ import Dashboard from "./pages/Dashboard";
 import MaternalHealth from "./pages/MaternalHealth";
 import NewbornHealth from "./pages/NewbornHealth";
 import NotFound from "./pages/NotFound";
-import Login from "./pages/Login";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +23,6 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/maternal-health" element={<MaternalHealth />} />
           <Route path="/newborn-health" element={<NewbornHealth />} />
-          <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

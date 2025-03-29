@@ -1,16 +1,14 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, X, MessageCircle, Video, Paperclip, Bot, BotMessageSquare } from 'lucide-react';
+import { Send, X, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { useToast } from '@/hooks/use-toast';
 
 interface Message {
   id: number;
   text: string;
   isUser: boolean;
-  isTyping?: boolean;
 }
 
 const Chatbot: React.FC = () => {
@@ -21,7 +19,6 @@ const Chatbot: React.FC = () => {
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
 
   const toggleChatbot = () => {
     setIsOpen(!isOpen);
@@ -49,50 +46,20 @@ const Chatbot: React.FC = () => {
     setTimeout(() => {
       let response = '';
       
-      // Enhanced AI responses based on different categories of questions
-      if (input.toLowerCase().includes('growth') || input.toLowerCase().includes('weight') || input.toLowerCase().includes('height')) {
-        response = "Tracking your baby's growth is important. Based on the data, your baby's weight and height are in the 60th percentile, which is healthy. Would you like me to show you the growth chart or provide nutrition recommendations?";
-      } 
-      else if (input.toLowerCase().includes('pregnancy') || input.toLowerCase().includes('pregnant')) {
-        response = "Monitoring your health during pregnancy is crucial. Make sure to track your blood pressure, stay hydrated, and attend all scheduled appointments. Would you like personalized prenatal tips?";
-      } 
-      else if (input.toLowerCase().includes('baby') || input.toLowerCase().includes('newborn')) {
-        response = "For newborn care, ensure proper feeding, monitor temperature regularly, and maintain a consistent sleep schedule. We have new video guides on bathing techniques. Would you like to see them?";
-      } 
-      else if (input.toLowerCase().includes('milestone') || input.toLowerCase().includes('development')) {
-        response = "Your baby should be reaching for objects at 3-4 months, sitting without support at 6 months, and may start crawling around 9 months. Would you like a detailed milestone tracker?";
-      }
-      else if (input.toLowerCase().includes('feed') || input.toLowerCase().includes('breastfeed')) {
-        response = "For optimal feeding, newborns typically need to feed 8-12 times in 24 hours. Make sure to track feeding times and duration. Would you like me to help schedule feeding reminders?";
-      }
-      else if (input.toLowerCase().includes('doctor') || input.toLowerCase().includes('appointment')) {
-        response = "I can help you schedule a virtual consultation with a pediatrician. Would you prefer a video call or secure chat? Our next available appointments are tomorrow at 2 PM and 4 PM.";
-      }
-      else if (input.toLowerCase().includes('symptom') || input.toLowerCase().includes('pain') || input.toLowerCase().includes('fever')) {
-        response = "If your baby has a fever over 100.4°F (38°C), contact your doctor immediately. For mild symptoms, I can help you track them. Would you like me to create a symptom log?";
-      } 
-      else {
-        response = "I'm here to help with maternal and newborn health questions. I can provide personalized advice on growth tracking, development milestones, feeding schedules, and more. What specific information are you looking for?";
+      if (input.toLowerCase().includes('pregnancy') || input.toLowerCase().includes('pregnant')) {
+        response = "Monitoring your health during pregnancy is crucial. Make sure to track your blood pressure, stay hydrated, and attend all scheduled appointments.";
+      } else if (input.toLowerCase().includes('baby') || input.toLowerCase().includes('newborn')) {
+        response = "For newborn care, ensure proper feeding, monitor temperature regularly, and maintain a consistent sleep schedule. Is there something specific you'd like to know?";
+      } else if (input.toLowerCase().includes('symptom') || input.toLowerCase().includes('pain')) {
+        response = "If you're experiencing concerning symptoms, please consult your healthcare provider immediately. Would you like me to help you log these symptoms?";
+      } else {
+        response = "I'm here to help with maternal and newborn health questions. Could you provide more details about what you'd like to know?";
       }
       
       const newBotMessage = { id: messages.length + 2, text: response, isUser: false };
       setMessages(prevMessages => [...prevMessages, newBotMessage]);
       setIsTyping(false);
     }, 1500);
-  };
-
-  const handleVideoCall = () => {
-    toast({
-      title: "Video Call Feature",
-      description: "Video consultation feature will be available soon. We'll notify you when it's ready.",
-    });
-  };
-
-  const handleAttachment = () => {
-    toast({
-      title: "Upload Documents",
-      description: "You can upload medical reports, prescriptions, and images for analysis soon.",
-    });
   };
 
   return (
@@ -106,7 +73,7 @@ const Chatbot: React.FC = () => {
           isOpen ? 'translate-y-20 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
         )}
       >
-        <BotMessageSquare className="h-6 w-6 text-white" />
+        <MessageCircle className="h-6 w-6 text-white" />
       </Button>
 
       {/* Chatbot window */}
@@ -122,8 +89,8 @@ const Chatbot: React.FC = () => {
         {/* Header */}
         <div className="p-4 border-b flex items-center justify-between bg-gradient-to-r from-health-blue to-health-light-blue text-white">
           <div className="flex items-center space-x-2">
-            <Bot className="h-5 w-5" />
-            <h3 className="font-medium">AI Health Assistant</h3>
+            <MessageCircle className="h-5 w-5" />
+            <h3 className="font-medium">Health Assistant</h3>
           </div>
           <Button
             variant="ghost"
@@ -162,28 +129,6 @@ const Chatbot: React.FC = () => {
             )}
             <div ref={messagesEndRef} />
           </div>
-        </div>
-
-        {/* Additional features */}
-        <div className="px-4 py-2 border-t border-b flex justify-between">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="text-health-blue"
-            onClick={handleVideoCall}
-          >
-            <Video className="h-4 w-4 mr-1" />
-            <span className="text-xs">Video Call</span>
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="text-health-blue"
-            onClick={handleAttachment}
-          >
-            <Paperclip className="h-4 w-4 mr-1" />
-            <span className="text-xs">Upload</span>
-          </Button>
         </div>
 
         {/* Input */}
