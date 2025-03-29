@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Heart, Baby, LineChart, MessageCircle, Home } from 'lucide-react';
+import { Menu, X, Heart, Baby, LineChart, MessageCircle, Home, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -76,19 +76,24 @@ const Header: React.FC = () => {
         </nav>
 
         <div className="hidden md:flex items-center space-x-4">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="text-sm rounded-lg border-health-light-blue text-health-blue hover:bg-health-light-blue/10"
-          >
-            Log In
-          </Button>
-          <Button 
-            size="sm" 
-            className="text-sm rounded-lg bg-gradient-to-r from-health-blue to-health-light-blue hover:shadow-md transition-shadow duration-300"
-          >
-            Get Started
-          </Button>
+          <Link to="/login">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-sm rounded-lg border-health-light-blue text-health-blue hover:bg-health-light-blue/10"
+            >
+              <User className="h-4 w-4 mr-1" />
+              Log In
+            </Button>
+          </Link>
+          <Link to="/login">
+            <Button 
+              size="sm" 
+              className="text-sm rounded-lg bg-gradient-to-r from-health-blue to-health-light-blue hover:shadow-md transition-shadow duration-300"
+            >
+              Get Started
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -125,24 +130,29 @@ const Header: React.FC = () => {
                     : 'text-gray-700 hover:text-primary hover:bg-primary/5'
                 )}
               >
-                {link.icon && React.cloneElement(link.icon, { className: 'h-5 w-5 mr-3' })}
+                {link.icon && React.cloneElement(link.icon, { className: "h-5 w-5 mr-3" })}
                 {link.name}
               </Link>
             ))}
           </nav>
           
           <div className="mt-8 flex flex-col space-y-3">
-            <Button 
-              variant="outline" 
-              className="w-full justify-center border-health-light-blue text-health-blue hover:bg-health-light-blue/10"
-            >
-              Log In
-            </Button>
-            <Button 
-              className="w-full justify-center bg-gradient-to-r from-health-blue to-health-light-blue hover:shadow-md transition-shadow duration-300"
-            >
-              Get Started
-            </Button>
+            <Link to="/login" className="w-full">
+              <Button 
+                variant="outline" 
+                className="w-full justify-center border-health-light-blue text-health-blue hover:bg-health-light-blue/10"
+              >
+                <User className="h-4 w-4 mr-2" />
+                Log In
+              </Button>
+            </Link>
+            <Link to="/login" className="w-full">
+              <Button 
+                className="w-full justify-center bg-gradient-to-r from-health-blue to-health-light-blue hover:shadow-md transition-shadow duration-300"
+              >
+                Get Started
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

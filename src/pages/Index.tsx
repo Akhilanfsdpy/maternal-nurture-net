@@ -1,7 +1,7 @@
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Baby, LineChart, Bell, Lock, Hospital } from 'lucide-react';
+import { Heart, Baby, LineChart, Bell, Lock, Hospital, MessageCircle, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/Header';
 import FeatureCard from '@/components/FeatureCard';
@@ -29,12 +29,14 @@ const Index: React.FC = () => {
               An integrated platform that combines IoT devices, AI analytics, and secure health data storage to ensure the wellbeing of mothers and newborns.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-health-blue to-health-light-blue hover:shadow-lg transition-shadow duration-300 text-white rounded-lg"
-              >
-                Get Started
-              </Button>
+              <Link to="/login">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-health-blue to-health-light-blue hover:shadow-lg transition-shadow duration-300 text-white rounded-lg"
+                >
+                  Get Started
+                </Button>
+              </Link>
               <Button 
                 variant="outline" 
                 size="lg" 
@@ -102,15 +104,15 @@ const Index: React.FC = () => {
               delay={300}
             />
             <FeatureCard
-              title="Secure Data Storage"
-              description="Your health data is encrypted and securely stored with the highest privacy standards."
-              icon={<Lock className="h-6 w-6 text-health-light-blue" />}
+              title="Video Consultations"
+              description="Connect with healthcare professionals through secure video calls for remote consultations."
+              icon={<Video className="h-6 w-6 text-health-pink" />}
               delay={400}
             />
             <FeatureCard
-              title="Healthcare Integration"
-              description="Seamlessly share data with your healthcare providers for better coordinated care."
-              icon={<Hospital className="h-6 w-6 text-health-blue" />}
+              title="AI Health Assistant"
+              description="Chat with our AI assistant for advice, tips, and answers to your health questions."
+              icon={<MessageCircle className="h-6 w-6 text-health-light-blue" />}
               delay={500}
             />
           </div>
@@ -125,13 +127,15 @@ const Index: React.FC = () => {
             Join thousands of families using MaternaLink to ensure better health outcomes for mothers and newborns.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg" 
-              variant="secondary"
-              className="bg-white text-health-blue hover:bg-white/90"
-            >
-              Get Started
-            </Button>
+            <Link to="/login">
+              <Button 
+                size="lg" 
+                variant="secondary"
+                className="bg-white text-health-blue hover:bg-white/90"
+              >
+                Get Started
+              </Button>
+            </Link>
             <Button 
               variant="outline" 
               size="lg" 
