@@ -6,12 +6,14 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import SuggestedVideos from './SuggestedVideos';
 import GrowthTracker from './GrowthTracker';
+import VoiceInteraction from './VoiceInteraction';
+import EnhancedAISystem from './EnhancedAISystem';
 
 interface Message {
   id: number;
   text: string;
   isUser: boolean;
-  attachments?: { type: 'video' | 'article' | 'growth' | 'image'; data: any }[];
+  attachments?: { type: 'video' | 'article' | 'growth' | 'image' | 'ai'; data: any }[];
 }
 
 const ChatInterface: React.FC = () => {
@@ -21,6 +23,7 @@ const ChatInterface: React.FC = () => {
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const [showTools, setShowTools] = useState(false);
+  const [showAISystem, setShowAISystem] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -108,6 +111,17 @@ const ChatInterface: React.FC = () => {
           text: "If you're experiencing concerning symptoms, please consult your healthcare provider immediately. Would you like me to help you log these symptoms or connect with a healthcare professional?",
           isUser: false
         };
+      } else if (input.toLowerCase().includes('ai') || input.toLowerCase().includes('how do you work')) {
+        response = {
+          id: messages.length + 2,
+          text: "I'm powered by advanced AI technology that combines large language models with medical knowledge retrieval. Here's more information about how I help you:",
+          isUser: false,
+          attachments: [{
+            type: 'ai',
+            data: {}
+          }]
+        };
+        setShowAISystem(true);
       } else {
         response = {
           id: messages.length + 2,
@@ -119,6 +133,15 @@ const ChatInterface: React.FC = () => {
       setMessages(prevMessages => [...prevMessages, response]);
       setIsTyping(false);
     }, 1500);
+  };
+
+  const handleVoiceTranscription = (text: string) => {
+    setInput(text);
+    // Auto-submit after voice input
+    setTimeout(() => {
+      const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
+      handleSubmit(fakeEvent);
+    }, 500);
   };
 
   const toggleTools = () => {
@@ -164,6 +187,9 @@ const ChatInterface: React.FC = () => {
                         </div>
                       ))}
                     </div>
+                  )}
+                  {attachment.type === 'ai' && showAISystem && (
+                    <EnhancedAISystem />
                   )}
                 </div>
               ))}
@@ -225,6 +251,9 @@ const ChatInterface: React.FC = () => {
           className="flex-1 py-2 text-sm"
           autoComplete="off"
         />
+        
+        <VoiceInteraction onTranscription={handleVoiceTranscription} />
+        
         <Button
           type="submit"
           size="icon"

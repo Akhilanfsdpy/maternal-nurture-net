@@ -8,6 +8,8 @@ import Chatbot from '@/components/Chatbot';
 import MaternalMetricsRow from '@/components/maternal-health/MaternalMetricsRow';
 import PregnancyProgress from '@/components/maternal-health/PregnancyProgress';
 import TabContent from '@/components/maternal-health/TabContent';
+import VideoRecommendations from '@/components/maternal-health/VideoRecommendations';
+import MedicalReportGenerator from '@/components/maternal-health/MedicalReportGenerator';
 
 const MaternalHealth: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -38,6 +40,11 @@ const MaternalHealth: React.FC = () => {
 
           <MaternalMetricsRow />
           <PregnancyProgress />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <VideoRecommendations />
+            <MedicalReportGenerator />
+          </div>
 
           <Tabs
             defaultValue="overview"
