@@ -11,6 +11,7 @@ import NewbornHealth from "./pages/NewbornHealth";
 import Chat from "./pages/Chat";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import Alerts from "./pages/Alerts";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/maternal-health" element={<MaternalHealth />} />
           <Route path="/newborn-health" element={<NewbornHealth />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/alerts" element={<Alerts />} />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
