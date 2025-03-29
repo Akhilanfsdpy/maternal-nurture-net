@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Heart, Baby, LineChart, MessageCircle } from 'lucide-react';
+import { Menu, X, Heart, Baby, LineChart, MessageCircle, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -24,7 +24,7 @@ const Header: React.FC = () => {
   }, [location.pathname]);
 
   const navLinks = [
-    { name: 'Home', path: '/', icon: null },
+    { name: 'Home', path: '/', icon: <Home className="h-4 w-4 mr-1" /> },
     { name: 'Dashboard', path: '/dashboard', icon: <LineChart className="h-4 w-4 mr-1" /> },
     { name: 'Maternal Health', path: '/maternal-health', icon: <Heart className="h-4 w-4 mr-1" /> },
     { name: 'Newborn Health', path: '/newborn-health', icon: <Baby className="h-4 w-4 mr-1" /> },
