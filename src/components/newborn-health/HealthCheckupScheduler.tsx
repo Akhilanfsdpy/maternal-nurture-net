@@ -8,8 +8,9 @@ import { DatePicker } from "./DatePicker";
 import { TimeSlotPicker } from "./TimeSlotPicker";
 import { Calendar, Clock, Stethoscope, CalendarCheck, Hospital } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Sample providers data
 const providers = [
@@ -25,15 +26,19 @@ const appointmentTypes = [
   { id: "development", name: "Developmental Assessment", duration: "45 min" }
 ];
 
-const HealthCheckupScheduler: React.FC = () => {
+interface HealthCheckupSchedulerProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}
+
+const HealthCheckupScheduler: React.FC<HealthCheckupSchedulerProps> = ({ open, setOpen }) => {
   const { toast } = useToast();
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [provider, setProvider] = useState<string>("");
   const [appointmentType, setAppointmentType] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,8 +72,7 @@ const HealthCheckupScheduler: React.FC = () => {
     setProvider("");
     setAppointmentType("");
     setNotes("");
-    setIsDialogOpen(false);
-    setIsSheetOpen(false);
+    setOpen(false);
   };
 
   const scheduleForm = (
@@ -138,90 +142,93 @@ const HealthCheckupScheduler: React.FC = () => {
   );
 
   return (
-    <Card className="shadow-sm">
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center">
-          <Stethoscope className="mr-2 h-5 w-5 text-health-pink" />
-          Health Checkup Scheduler
-        </CardTitle>
-        <CardDescription>
-          Schedule appointments with your healthcare provider
-        </CardDescription>
-      </CardHeader>
+    <>
+      <Card className="shadow-sm">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center">
+            <Stethoscope className="mr-2 h-5 w-5 text-health-pink" />
+            Health Checkup Scheduler
+          </CardTitle>
+          <CardDescription>
+            Schedule appointments with your healthcare provider
+          </CardDescription>
+        </CardHeader>
 
-      <CardContent>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-            <Calendar className="h-10 w-10 text-health-blue p-2 bg-blue-50 rounded-full" />
-            <div>
-              <p className="font-medium">Next Checkup</p>
-              <p className="text-sm text-gray-500">Jun 15, 2023</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-            <Hospital className="h-10 w-10 text-health-pink p-2 bg-pink-50 rounded-full" />
-            <div>
-              <p className="font-medium">Primary Provider</p>
-              <p className="text-sm text-gray-500">Dr. Sarah Johnson</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-            <CalendarCheck className="h-10 w-10 text-health-mint p-2 bg-green-50 rounded-full" />
-            <div>
-              <p className="font-medium">Last Visit</p>
-              <p className="text-sm text-gray-500">May 10, 2023</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4">
-          {/* Desktop dialog button */}
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-health-blue to-health-light-blue hidden sm:flex">
-                <Calendar className="mr-2 h-4 w-4" />
-                Schedule New Appointment
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Schedule Health Checkup</DialogTitle>
-                <DialogDescription>
-                  Select a date, time, and provider for your baby's next health checkup.
-                </DialogDescription>
-              </DialogHeader>
-              {scheduleForm}
-            </DialogContent>
-          </Dialog>
-
-          {/* Mobile sheet button */}
-          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-            <SheetTrigger asChild>
-              <Button className="bg-gradient-to-r from-health-blue to-health-light-blue sm:hidden">
-                <Calendar className="mr-2 h-4 w-4" />
-                Schedule New Appointment
-              </Button>
-            </SheetTrigger>
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Schedule Health Checkup</SheetTitle>
-                <SheetDescription>
-                  Select a date, time, and provider for your baby's next health checkup.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="py-4">
-                {scheduleForm}
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+              <Calendar className="h-10 w-10 text-health-blue p-2 bg-blue-50 rounded-full" />
+              <div>
+                <p className="font-medium">Next Checkup</p>
+                <p className="text-sm text-gray-500">Jun 15, 2023</p>
               </div>
-            </SheetContent>
-          </Sheet>
+            </div>
+            <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+              <Hospital className="h-10 w-10 text-health-pink p-2 bg-pink-50 rounded-full" />
+              <div>
+                <p className="font-medium">Primary Provider</p>
+                <p className="text-sm text-gray-500">Dr. Sarah Johnson</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+              <CalendarCheck className="h-10 w-10 text-health-mint p-2 bg-green-50 rounded-full" />
+              <div>
+                <p className="font-medium">Last Visit</p>
+                <p className="text-sm text-gray-500">May 10, 2023</p>
+              </div>
+            </div>
+          </div>
 
-          <Button variant="outline" className="border-health-light-blue text-health-blue">
-            <Clock className="mr-2 h-4 w-4" />
-            View Past Appointments
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button 
+              className="bg-gradient-to-r from-health-blue to-health-light-blue"
+              onClick={() => setOpen(true)}
+            >
+              <Calendar className="mr-2 h-4 w-4" />
+              Schedule New Appointment
+            </Button>
+
+            <Button variant="outline" className="border-health-light-blue text-health-blue">
+              <Clock className="mr-2 h-4 w-4" />
+              View Past Appointments
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {isMobile ? (
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetContent className="w-full sm:max-w-md">
+            <SheetHeader>
+              <SheetTitle>Schedule Health Checkup</SheetTitle>
+              <SheetDescription>
+                Select a date, time, and provider for your baby's next health checkup.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="py-4">
+              {scheduleForm}
+            </div>
+          </SheetContent>
+        </Sheet>
+      ) : (
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Schedule Health Checkup</DialogTitle>
+              <DialogDescription>
+                Select a date, time, and provider for your baby's next health checkup.
+              </DialogDescription>
+            </DialogHeader>
+            {scheduleForm}
+            <DialogFooter className="mt-4">
+              <Button variant="outline" onClick={() => setOpen(false)}>
+                Cancel
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
   );
 };
 
