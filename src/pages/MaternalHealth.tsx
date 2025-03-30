@@ -10,9 +10,12 @@ import PregnancyProgress from '@/components/maternal-health/PregnancyProgress';
 import TabContent from '@/components/maternal-health/TabContent';
 import VideoRecommendations from '@/components/maternal-health/VideoRecommendations';
 import MedicalReportGenerator from '@/components/maternal-health/MedicalReportGenerator';
+import HealthDataForm from '@/components/maternal-health/HealthDataForm';
+import AppointmentScheduler from '@/components/maternal-health/AppointmentScheduler';
 
 const MaternalHealth: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [isAppointmentSchedulerOpen, setIsAppointmentSchedulerOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -27,14 +30,11 @@ const MaternalHealth: React.FC = () => {
               <p className="text-gray-500">Track, monitor, and manage your pregnancy journey</p>
             </div>
             <div className="flex gap-3">
-              <Button variant="outline" className="border-health-light-blue text-health-blue">
-                <Calendar className="mr-2 h-4 w-4" />
-                Schedule Appointment
-              </Button>
-              <Button className="bg-gradient-to-r from-health-blue to-health-light-blue">
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Log Health Data
-              </Button>
+              <AppointmentScheduler 
+                isOpen={isAppointmentSchedulerOpen} 
+                setIsOpen={setIsAppointmentSchedulerOpen} 
+              />
+              <HealthDataForm />
             </div>
           </div>
 

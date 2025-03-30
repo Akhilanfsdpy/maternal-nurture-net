@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Heart, Baby, Activity, CalendarClock, Bell, BarChart, Thermometer, Clock, Droplets } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -9,8 +8,8 @@ import Header from '@/components/Header';
 import HealthMetric from '@/components/HealthMetric';
 import Chatbot from '@/components/Chatbot';
 import { cn } from '@/lib/utils';
+import NotificationsPanel from '@/components/notifications/NotificationsPanel';
 
-// Sample data for charts
 const maternalData = [
   { date: 'Week 1', heartRate: 78, bp: 115, sleep: 7.2 },
   { date: 'Week 2', heartRate: 82, bp: 118, sleep: 6.8 },
@@ -31,7 +30,6 @@ const newbornData = [
   { date: 'Week 7', weight: 5.0, temperature: 36.7, feeding: 5 },
 ];
 
-// Upcoming events data
 const upcomingEvents = [
   {
     id: 1,
@@ -53,7 +51,6 @@ const upcomingEvents = [
   },
 ];
 
-// Recent alerts data
 const recentAlerts = [
   {
     id: 1,
@@ -83,7 +80,6 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -104,10 +100,7 @@ const Dashboard: React.FC = () => {
               <p className="text-gray-500">Monitor and track health metrics for you and your baby</p>
             </div>
             <div className="flex gap-3">
-              <Button variant="outline" className="border-health-light-blue text-health-blue">
-                <Bell className="mr-2 h-4 w-4" />
-                Notifications
-              </Button>
+              <NotificationsPanel />
               <Button className="bg-gradient-to-r from-health-blue to-health-light-blue">
                 <Activity className="mr-2 h-4 w-4" />
                 Record Vitals
@@ -129,7 +122,6 @@ const Dashboard: React.FC = () => {
               </TabsList>
             </div>
 
-            {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <HealthMetric
@@ -290,7 +282,6 @@ const Dashboard: React.FC = () => {
               </div>
             </TabsContent>
 
-            {/* Maternal Tab */}
             <TabsContent value="maternal" className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <HealthMetric
@@ -389,7 +380,6 @@ const Dashboard: React.FC = () => {
               </Card>
             </TabsContent>
 
-            {/* Newborn Tab */}
             <TabsContent value="newborn" className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <HealthMetric
