@@ -1,7 +1,9 @@
 
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Baby, ArrowUp } from 'lucide-react';
+import { Baby, ArrowUp, Calendar, QrCode } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 interface GrowthData {
   months: number[];
@@ -12,15 +14,35 @@ interface GrowthData {
 
 interface GrowthTrackerProps {
   data: GrowthData;
+  showFullControls?: boolean;
 }
 
-const GrowthTracker: React.FC<GrowthTrackerProps> = ({ data }) => {
+const GrowthTracker: React.FC<GrowthTrackerProps> = ({ data, showFullControls = false }) => {
+  const { toast } = useToast();
+  
   // Format data for chart
   const chartData = data.months.map((month, index) => ({
     month: `${month}m`,
     weight: data.weights[index],
     height: data.heights[index]
   }));
+
+  const handleScheduleAppointment = () => {
+    toast({
+      title: "Schedule Appointment",
+      description: "Redirecting to appointment scheduling...",
+    });
+    // In a real app, this would redirect to the appointment page
+    window.location.href = "/newborn-health?tab=appointments";
+  };
+
+  const handleAddGrowthData = () => {
+    toast({
+      title: "Add Growth Data",
+      description: "Opening growth data form...",
+    });
+    // In a real app, this would open the growth data form
+  };
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden p-4">
@@ -61,6 +83,23 @@ const GrowthTracker: React.FC<GrowthTrackerProps> = ({ data }) => {
         <div>From {data.months[0]} to {data.months[data.months.length - 1]} months</div>
         <div>Weight: {data.weights[0]} kg → {data.weights[data.weights.length - 1]} kg</div>
       </div>
+      
+      {showFullControls && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Button size="sm" variant="outline" className="text-xs flex items-center" onClick={handleScheduleAppointment}>
+            <Calendar className="h-3 w-3 mr-1" />
+            Schedule Checkup
+          </Button>
+          <Button size="sm" variant="outline" className="text-xs flex items-center" onClick={handleAddGrowthData}>
+            <ArrowUp className="h-3 w-3 mr-1" />
+            Add New Measurement
+          </Button>
+          <Button size="sm" variant="outline" className="text-xs flex items-center">
+            <QrCode className="h-3 w-3 mr-1" />
+            Share via QR
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

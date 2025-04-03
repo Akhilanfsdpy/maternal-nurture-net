@@ -38,9 +38,10 @@ export interface MedicalReportAttachment {
 }
 
 export interface QRCodeAttachment {
-  type: 'appointment' | 'prescription' | 'medical-record' | 'birth-certificate';
+  type: 'appointment' | 'prescription' | 'medical-record' | 'birth-certificate' | 'growth-chart';
   data: string;
   description: string;
+  redirectUrl?: string;
 }
 
 export interface PrescriptionAttachment {

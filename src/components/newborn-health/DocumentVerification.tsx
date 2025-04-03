@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Key, FileText, CheckCircle, QrCode } from 'lucide-react';
+import { Key, FileText, CheckCircle, QrCode, FileSignature, Download } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card } from '@/components/ui/card';
 
 const DocumentVerification: React.FC = () => {
   const [parentKey, setParentKey] = useState('');
@@ -12,6 +13,8 @@ const DocumentVerification: React.FC = () => {
   const [verificationStatus, setVerificationStatus] = useState<'idle' | 'verified' | 'failed'>('idle');
   const [documentType, setDocumentType] = useState('birth-certificate');
   const [documentId, setDocumentId] = useState('');
+  const [generatedQR, setGeneratedQR] = useState<string | null>(null);
+  const [certificateGenerated, setCertificateGenerated] = useState(false);
   const { toast } = useToast();
 
   const handleVerify = () => {
@@ -23,6 +26,13 @@ const DocumentVerification: React.FC = () => {
         title: "Verification Successful",
         description: "The document keys match and are verified.",
       });
+      
+      // Auto-generate certificate
+      setCertificateGenerated(true);
+      
+      // Generate QR code data
+      const qrData = `https://example.com/baby-profile?id=${documentId}&type=${documentType}`;
+      setGeneratedQR(qrData);
     } else {
       setVerificationStatus('failed');
       toast({
@@ -43,10 +53,22 @@ const DocumentVerification: React.FC = () => {
       return;
     }
 
+    // Generate QR code data that would lead to baby's growth tracking page
+    const qrData = `https://example.com/baby-profile?id=${documentId}&type=${documentType}`;
+    setGeneratedQR(qrData);
+
     toast({
       title: "QR Code Generated",
       description: `QR code for ${documentType} with ID ${documentId} has been generated.`,
     });
+  };
+
+  const handleDownloadPDF = () => {
+    toast({
+      title: "PDF Download Started",
+      description: "Your verified certificate is being downloaded as a PDF.",
+    });
+    // In a real app, this would generate and download a PDF
   };
 
   return (
@@ -106,12 +128,49 @@ const DocumentVerification: React.FC = () => {
           </Button>
           
           {verificationStatus === 'verified' && (
-            <div className="bg-green-50 p-3 rounded-md flex items-start">
-              <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 mr-2 flex-shrink-0" />
-              <div>
-                <p className="text-green-800 font-medium">Document Verified</p>
-                <p className="text-green-700 text-sm">This document has been cryptographically verified and is authentic.</p>
+            <div className="space-y-4">
+              <div className="bg-green-50 p-3 rounded-md flex items-start">
+                <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 mr-2 flex-shrink-0" />
+                <div>
+                  <p className="text-green-800 font-medium">Document Verified</p>
+                  <p className="text-green-700 text-sm">This document has been cryptographically verified and is authentic.</p>
+                </div>
               </div>
+              
+              {certificateGenerated && (
+                <Card className="p-4 border-green-200 bg-green-50">
+                  <div className="text-center space-y-3">
+                    <div className="flex justify-center">
+                      <FileSignature className="h-10 w-10 text-green-600" />
+                    </div>
+                    <h3 className="font-medium text-green-800">Digital Certificate Generated</h3>
+                    <p className="text-sm text-green-700">
+                      Your certificate has been digitally signed by the healthcare provider.
+                    </p>
+                    <div className="flex justify-center pt-2">
+                      <Button 
+                        onClick={handleDownloadPDF}
+                        className="bg-green-600 hover:bg-green-700"
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Certificate PDF
+                      </Button>
+                    </div>
+                    
+                    {generatedQR && (
+                      <div className="mt-4 flex flex-col items-center">
+                        <p className="text-sm text-green-700 mb-2">Certificate QR Code</p>
+                        <div className="h-32 w-32 border border-green-300 bg-white flex items-center justify-center">
+                          <QrCode className="h-20 w-20 text-green-800" />
+                        </div>
+                        <p className="mt-2 text-xs text-green-600">
+                          Scan to access baby's growth and health records
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              )}
             </div>
           )}
           
@@ -128,7 +187,8 @@ const DocumentVerification: React.FC = () => {
         
         <TabsContent value="qr" className="space-y-4 pt-4">
           <p className="text-sm text-gray-600">
-            Generate a QR code that healthcare providers can scan to verify the authenticity of your documents and access authorized information.
+            Generate a QR code that links to your child's health records. This QR code can be scanned to access growth charts, 
+            appointment scheduling, feeding logs, and other health information.
           </p>
           
           <div className="space-y-4">
@@ -142,7 +202,8 @@ const DocumentVerification: React.FC = () => {
                 <option value="birth-certificate">Birth Certificate</option>
                 <option value="vaccination">Vaccination Record</option>
                 <option value="health-checkup">Health Checkup Report</option>
-                <option value="insurance">Insurance Information</option>
+                <option value="growth-chart">Growth Chart</option>
+                <option value="feeding-schedule">Feeding Schedule</option>
               </select>
             </div>
             
@@ -164,15 +225,24 @@ const DocumentVerification: React.FC = () => {
             Generate QR Code
           </Button>
           
-          {documentId && (
+          {generatedQR && (
             <div className="mt-4 flex flex-col items-center p-4 border border-gray-200 rounded-lg">
               <div className="h-40 w-40 border border-gray-300 bg-gray-100 flex items-center justify-center">
                 <QrCode className="h-20 w-20 text-gray-800" />
               </div>
               <p className="mt-2 text-sm text-gray-600">{documentType} - ID: {documentId}</p>
-              <Button variant="outline" size="sm" className="mt-2">
-                Download QR Code
-              </Button>
+              <p className="text-xs text-gray-500 mt-1 text-center">
+                Scanning this QR code redirects to your child's health dashboard with growth tracking, appointment scheduling, and health records.
+              </p>
+              <div className="flex gap-2 mt-3">
+                <Button variant="outline" size="sm">
+                  <Download className="h-3 w-3 mr-1" />
+                  Download
+                </Button>
+                <Button variant="outline" size="sm">
+                  Share
+                </Button>
+              </div>
             </div>
           )}
         </TabsContent>
