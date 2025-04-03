@@ -10,6 +10,7 @@ import MaternalHealth from "./pages/MaternalHealth";
 import NewbornHealth from "./pages/NewbornHealth";
 import Chat from "./pages/Chat";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
 import Alerts from "./pages/Alerts";
 
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/chat" element={<Chat />} />
           <Route path="/alerts" element={<Alerts />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

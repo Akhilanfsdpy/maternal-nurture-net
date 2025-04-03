@@ -4,11 +4,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Heart, Baby, LineChart, MessageCircle, Home, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -86,7 +88,7 @@ const Header: React.FC = () => {
               Log In
             </Button>
           </Link>
-          <Link to="/login">
+          <Link to="/signup">
             <Button 
               size="sm" 
               className="text-sm rounded-lg bg-gradient-to-r from-health-blue to-health-light-blue hover:shadow-md transition-shadow duration-300"
@@ -146,7 +148,7 @@ const Header: React.FC = () => {
                 Log In
               </Button>
             </Link>
-            <Link to="/login" className="w-full">
+            <Link to="/signup" className="w-full">
               <Button 
                 className="w-full justify-center bg-gradient-to-r from-health-blue to-health-light-blue hover:shadow-md transition-shadow duration-300"
               >
