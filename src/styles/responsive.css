@@ -1,0 +1,208 @@
+
+/* Responsive Media Queries */
+
+/* Extra small devices (phones, 640px and down) */
+@media (max-width: 640px) {
+  .responsive-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .responsive-text {
+    font-size: 0.875rem;
+  }
+  
+  .responsive-heading {
+    font-size: 1.5rem;
+  }
+  
+  .responsive-form {
+    padding: 1rem;
+  }
+  
+  .responsive-chart {
+    height: 200px;
+  }
+  
+  .responsive-hide-xs {
+    display: none;
+  }
+  
+  .responsive-stack-xs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .responsive-full-width-xs {
+    width: 100%;
+  }
+}
+
+/* Small devices (tablets, 641px and up) */
+@media (min-width: 641px) and (max-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  
+  .responsive-text {
+    font-size: 0.9375rem;
+  }
+  
+  .responsive-heading {
+    font-size: 1.75rem;
+  }
+  
+  .responsive-form {
+    padding: 1.25rem;
+  }
+  
+  .responsive-chart {
+    height: 250px;
+  }
+  
+  .responsive-hide-sm {
+    display: none;
+  }
+  
+  .responsive-stack-sm {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Medium devices (laptops, 769px and up) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .responsive-text {
+    font-size: 1rem;
+  }
+  
+  .responsive-heading {
+    font-size: 2rem;
+  }
+  
+  .responsive-form {
+    padding: 1.5rem;
+  }
+  
+  .responsive-chart {
+    height: 300px;
+  }
+}
+
+/* Large devices (desktops, 1025px and up) */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .responsive-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.75rem;
+  }
+  
+  .responsive-text {
+    font-size: 1.0625rem;
+  }
+  
+  .responsive-heading {
+    font-size: 2.25rem;
+  }
+  
+  .responsive-form {
+    padding: 1.75rem;
+  }
+  
+  .responsive-chart {
+    height: 350px;
+  }
+}
+
+/* Extra large devices (large desktops, 1281px and up) */
+@media (min-width: 1281px) {
+  .responsive-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  
+  .responsive-text {
+    font-size: 1.125rem;
+  }
+  
+  .responsive-heading {
+    font-size: 2.5rem;
+  }
+  
+  .responsive-form {
+    padding: 2rem;
+  }
+  
+  .responsive-chart {
+    height: 400px;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .touch-spacing {
+    margin-bottom: 1rem;
+  }
+  
+  .touch-padding {
+    padding: 0.75rem;
+  }
+}
+
+/* Print media query for documents */
+@media print {
+  .no-print {
+    display: none;
+  }
+  
+  .print-only {
+    display: block;
+  }
+  
+  .print-break-before {
+    page-break-before: always;
+  }
+  
+  .print-break-after {
+    page-break-after: always;
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+  }
+  
+  .print-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .dark-mode-aware {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+  }
+  
+  .dark-mode-border {
+    border-color: #333;
+  }
+  
+  .dark-mode-shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+}
