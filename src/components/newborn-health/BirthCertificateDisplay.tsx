@@ -1,10 +1,12 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { BirthCertificate } from '@/types/newbornHealth';
-import { Download, Printer, Share2 } from 'lucide-react';
+import { Download, Printer, Share2, Key, FileSignature } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface BirthCertificateDisplayProps {
   certificate: BirthCertificate;
@@ -12,6 +14,8 @@ interface BirthCertificateDisplayProps {
 
 const BirthCertificateDisplay: React.FC<BirthCertificateDisplayProps> = ({ certificate }) => {
   const { toast } = useToast();
+  const [doctorKey, setDoctorKey] = useState('');
+  const [isSignedByDoctor, setIsSignedByDoctor] = useState(false);
 
   const handleDownload = () => {
     toast({
@@ -37,6 +41,25 @@ const BirthCertificateDisplay: React.FC<BirthCertificateDisplayProps> = ({ certi
     // In a real application, this would open sharing options
   };
 
+  const handleDoctorSignature = () => {
+    if (doctorKey.trim() === '') {
+      toast({
+        title: "Error",
+        description: "Please enter the verification key provided by the parent.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // In a real app, this would verify against a database
+    // For demo purposes, we'll accept any key and simulate verification
+    setIsSignedByDoctor(true);
+    toast({
+      title: "Certificate Signed",
+      description: "The birth certificate has been digitally signed by the healthcare provider.",
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -57,6 +80,41 @@ const BirthCertificateDisplay: React.FC<BirthCertificateDisplayProps> = ({ certi
         </div>
       </div>
       
+      {!isSignedByDoctor && (
+        <Card className="border border-amber-300 bg-amber-50 mb-4">
+          <CardContent className="pt-6">
+            <div className="flex items-start space-x-4">
+              <FileSignature className="h-8 w-8 text-amber-600 flex-shrink-0" />
+              <div>
+                <h3 className="font-medium text-amber-800">Healthcare Provider Signature Required</h3>
+                <p className="text-amber-700 text-sm mb-4">
+                  This birth certificate is pending digital signature from the healthcare provider.
+                </p>
+                
+                <div className="bg-white p-4 rounded-md border border-amber-200">
+                  <h4 className="text-sm font-medium text-amber-800 mb-2">Healthcare Provider Verification</h4>
+                  <div className="flex space-x-2">
+                    <Input
+                      placeholder="Enter verification key provided by parent"
+                      value={doctorKey}
+                      onChange={(e) => setDoctorKey(e.target.value)}
+                      className="border-amber-200"
+                    />
+                    <Button 
+                      onClick={handleDoctorSignature}
+                      className="whitespace-nowrap bg-amber-600 hover:bg-amber-700"
+                    >
+                      <FileSignature className="h-4 w-4 mr-2" />
+                      Sign Certificate
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+      
       <Card className="border-2 border-health-pink/20 shadow-md overflow-hidden print:shadow-none">
         <div className="bg-gradient-to-r from-health-pink/10 to-health-light-pink/10 p-6 border-b">
           <div className="flex justify-between items-center">
@@ -67,6 +125,12 @@ const BirthCertificateDisplay: React.FC<BirthCertificateDisplayProps> = ({ certi
             <div className="text-right">
               <p className="text-sm font-medium">Certificate ID: {certificate.certificateId}</p>
               <p className="text-sm text-gray-500">Issue Date: {certificate.issueDate}</p>
+              {isSignedByDoctor && (
+                <p className="text-sm font-medium text-green-600 flex items-center justify-end">
+                  <FileSignature className="h-4 w-4 mr-1" />
+                  Digitally Signed
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -159,8 +223,15 @@ const BirthCertificateDisplay: React.FC<BirthCertificateDisplayProps> = ({ certi
                 <span className="font-medium">{certificate.issuedBy}</span>
               </div>
               <div className="mt-4 md:mt-0">
-                <div className="h-20 w-40 border border-dashed border-gray-300 flex items-center justify-center">
-                  <span className="text-sm text-gray-400">Digital Signature</span>
+                <div className={`h-20 w-40 border ${isSignedByDoctor ? 'border-solid border-gray-300' : 'border-dashed border-gray-300'} flex items-center justify-center`}>
+                  {isSignedByDoctor ? (
+                    <div className="text-center">
+                      <FileSignature className="h-6 w-6 text-health-blue mx-auto" />
+                      <span className="text-sm text-gray-600 mt-1 block">Digital Signature</span>
+                    </div>
+                  ) : (
+                    <span className="text-sm text-gray-400">Digital Signature</span>
+                  )}
                 </div>
               </div>
             </div>
@@ -175,6 +246,18 @@ const BirthCertificateDisplay: React.FC<BirthCertificateDisplayProps> = ({ certi
           <p className="text-xs text-center text-gray-500 mt-4">
             This digital birth certificate is an official document. Verify the authenticity by scanning the QR code or visiting the official portal.
           </p>
+          
+          {isSignedByDoctor && (
+            <Alert className="bg-green-50 border-green-200">
+              <AlertTitle className="text-green-800">
+                Verified Document
+              </AlertTitle>
+              <AlertDescription className="text-green-700">
+                This certificate has been digitally signed and verified by a healthcare professional.
+                Document ID: {certificate.certificateId}
+              </AlertDescription>
+            </Alert>
+          )}
         </CardContent>
       </Card>
     </div>
