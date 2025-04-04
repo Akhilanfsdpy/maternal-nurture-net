@@ -1,7 +1,5 @@
 
 import React, { useState } from 'react';
-import { Calendar, PlusCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
 import Chatbot from '@/components/Chatbot';

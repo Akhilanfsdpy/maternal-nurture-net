@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Calendar, AlertCircle } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
@@ -20,7 +19,7 @@ import EnhancedDocumentScanner from '@/components/newborn-health/EnhancedDocumen
 
 const NewbornHealth: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [activeFeatureTab, setActiveFeatureTab] = useState('growth');
+  const [activeFeatureTab, setActiveFeatureTab] = useState('verify');
   const [showScheduler, setShowScheduler] = useState(false);
   const isMobile = useIsMobile();
 
@@ -59,14 +58,12 @@ const NewbornHealth: React.FC = () => {
               <TabsTrigger value="growth">Growth</TabsTrigger>
               <TabsTrigger value="symptoms">Symptoms</TabsTrigger>
               <TabsTrigger value="appointments">Appointments</TabsTrigger>
+              <TabsTrigger value="vaccinations">Vaccinations</TabsTrigger>
               <TabsTrigger value="documents">Documents</TabsTrigger>
+              <TabsTrigger value="birthcertificate">Birth Certificate</TabsTrigger>
             </TabsList>
             
             <TabsContent value="overview" className="space-y-6">
-              <div className="mb-6">
-                <HealthMetricsDisplay />
-              </div>
-              
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <ImprovedGrowthChart />
                 <HealthCheckupScheduler open={showScheduler} setOpen={setShowScheduler} />
@@ -86,42 +83,6 @@ const NewbornHealth: React.FC = () => {
               <div className="mb-6">
                 <ImprovedGrowthChart />
               </div>
-              
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-start">
-                <AlertCircle className="h-5 w-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
-                <div>
-                  <p className="text-blue-800 font-medium">Why track growth?</p>
-                  <p className="text-blue-700 text-sm">
-                    Regular growth tracking helps ensure your baby is developing properly and can identify potential health issues early.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Button 
-                  variant="outline" 
-                  className="h-auto py-6 flex flex-col items-center justify-center gap-2"
-                >
-                  <Calendar className="h-6 w-6 text-health-blue" />
-                  <span>Schedule Growth Assessment</span>
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  className="h-auto py-6 flex flex-col items-center justify-center gap-2"
-                >
-                  <Calendar className="h-6 w-6 text-health-pink" />
-                  <span>Add New Measurements</span>
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  className="h-auto py-6 flex flex-col items-center justify-center gap-2"
-                >
-                  <Calendar className="h-6 w-6 text-health-mint" />
-                  <span>Export Growth Data</span>
-                </Button>
-              </div>
             </TabsContent>
             
             <TabsContent value="symptoms" className="space-y-6">
@@ -130,6 +91,10 @@ const NewbornHealth: React.FC = () => {
             
             <TabsContent value="appointments" className="space-y-6">
               <EnhancedAppointments />
+            </TabsContent>
+            
+            <TabsContent value="vaccinations" className="space-y-6">
+              {/* Vaccinations content */}
             </TabsContent>
             
             <TabsContent value="documents" className="space-y-6">
@@ -147,6 +112,10 @@ const NewbornHealth: React.FC = () => {
                   <EnhancedDocumentScanner />
                 </TabsContent>
               </Tabs>
+            </TabsContent>
+            
+            <TabsContent value="birthcertificate" className="space-y-6">
+              {/* Birth Certificate content */}
             </TabsContent>
           </Tabs>
         </div>
