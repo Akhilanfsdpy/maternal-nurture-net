@@ -36,22 +36,6 @@
   .responsive-full-width-xs {
     width: 100%;
   }
-  
-  .tabs-container-xs {
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 0.5rem;
-  }
-  
-  .tab-scrollable-xs {
-    display: inline-flex;
-    min-width: max-content;
-  }
-  
-  .mobile-menu-padding {
-    padding: 0.75rem;
-  }
 }
 
 /* Small devices (tablets, 641px and up) */
@@ -85,12 +69,6 @@
     flex-direction: column;
     align-items: stretch;
   }
-  
-  .tabs-container-sm {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 0.5rem;
-  }
 }
 
 /* Medium devices (laptops, 769px and up) */
@@ -114,11 +92,6 @@
   
   .responsive-chart {
     height: 300px;
-  }
-  
-  .tab-container-md {
-    max-width: 90%;
-    margin: 0 auto;
   }
 }
 
@@ -232,34 +205,4 @@
   .dark-mode-shadow {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
-}
-
-/* Animation classes for signup form feedback */
-.head-shake {
-  animation: head-shake 0.6s ease-in-out;
-}
-
-.head-nod {
-  animation: head-nod 0.6s ease-in-out;
-}
-
-@keyframes head-shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-10px); }
-  40%, 80% { transform: translateX(10px); }
-}
-
-@keyframes head-nod {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(10px); }
-}
-
-/* Custom class for hoverable cards */
-.hover-card-effect {
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.hover-card-effect:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }

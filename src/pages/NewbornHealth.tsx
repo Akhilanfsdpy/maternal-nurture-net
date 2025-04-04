@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Calendar, AlertCircle, Plus } from 'lucide-react';
+import { Calendar, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
@@ -17,13 +17,6 @@ import SymptomsTracker from '@/components/newborn-health/SymptomsTracker';
 import ImprovedGrowthChart from '@/components/newborn-health/ImprovedGrowthChart';
 import EnhancedDocumentVerification from '@/components/newborn-health/EnhancedDocumentVerification';
 import EnhancedDocumentScanner from '@/components/newborn-health/EnhancedDocumentScanner';
-import OverviewTabContent from '@/components/newborn-health/OverviewTabContent';
-import FeedingTabContent from '@/components/newborn-health/FeedingTabContent';
-import MilestonesTabContent from '@/components/newborn-health/MilestonesTabContent';
-import VaccinationsTabContent from '@/components/newborn-health/VaccinationsTabContent';
-import DocumentsTabContent from '@/components/newborn-health/DocumentsTabContent';
-import BirthCertificateTabContent from '@/components/newborn-health/BirthCertificateTabContent';
-import HealthTabs from '@/components/newborn-health/HealthTabs';
 
 const NewbornHealth: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -44,13 +37,13 @@ const NewbornHealth: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
             <div>
-              <h1 className="text-3xl font-bold mb-2 responsive-heading">Newborn Health</h1>
-              <p className="text-gray-500 responsive-text">Track, monitor, and manage your baby's health and development</p>
+              <h1 className="text-3xl font-bold mb-2">Newborn Health</h1>
+              <p className="text-gray-500">Track, monitor, and manage your baby's health and development</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <Button 
                 variant="outline" 
-                className="border-health-light-pink text-health-pink hover-card-effect"
+                className="border-health-light-pink text-health-pink"
                 onClick={handleScheduleClick}
               >
                 <Calendar className="mr-2 h-4 w-4" />
@@ -60,116 +53,102 @@ const NewbornHealth: React.FC = () => {
             </div>
           </div>
           
-          <div className={isMobile ? "tabs-container-xs" : ""}>
-            <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
-              <div className={isMobile ? "tab-scrollable-xs" : "bg-white rounded-lg p-1 shadow-sm mb-6"}>
-                <TabsList className="bg-white rounded-lg p-1 shadow-sm mb-6">
-                  <TabsTrigger value="overview">Overview</TabsTrigger>
-                  <TabsTrigger value="growth">Growth</TabsTrigger>
-                  <TabsTrigger value="symptoms">Symptoms</TabsTrigger>
-                  <TabsTrigger value="appointments">Appointments</TabsTrigger>
-                  <TabsTrigger value="documents">Documents</TabsTrigger>
-                </TabsList>
+          <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="bg-white rounded-lg p-1 shadow-sm mb-6">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="growth">Growth</TabsTrigger>
+              <TabsTrigger value="symptoms">Symptoms</TabsTrigger>
+              <TabsTrigger value="appointments">Appointments</TabsTrigger>
+              <TabsTrigger value="documents">Documents</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="overview" className="space-y-6">
+              <div className="mb-6">
+                <HealthMetricsDisplay />
               </div>
               
-              <TabsContent value="overview" className="space-y-6">
-                <div className="mb-6">
-                  <HealthMetricsDisplay />
-                </div>
-                
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                  <ImprovedGrowthChart />
-                  <HealthCheckupScheduler open={showScheduler} setOpen={setShowScheduler} />
-                </div>
-                
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                  <BabyActivitiesTracker />
-                  <SymptomsTracker />
-                </div>
-                
-                <div className="mb-6">
-                  <ParentingLessons />
-                </div>
-                
-                <HealthTabs 
-                  activeTab="overview" 
-                  setActiveTab={(tab) => console.log(tab)}
-                  feedingData={feedingData}
-                  milestones={milestones}
-                  vaccinations={vaccinations} 
-                />
-              </TabsContent>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <ImprovedGrowthChart />
+                <HealthCheckupScheduler open={showScheduler} setOpen={setShowScheduler} />
+              </div>
               
-              <TabsContent value="growth" className="space-y-6">
-                <div className="mb-6">
-                  <ImprovedGrowthChart />
-                </div>
-                
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-start">
-                  <AlertCircle className="h-5 w-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
-                  <div>
-                    <p className="text-blue-800 font-medium">Why track growth?</p>
-                    <p className="text-blue-700 text-sm">
-                      Regular growth tracking helps ensure your baby is developing properly and can identify potential health issues early.
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <Button 
-                    variant="outline" 
-                    className="h-auto py-6 flex flex-col items-center justify-center gap-2 hover-card-effect"
-                    onClick={handleScheduleClick}
-                  >
-                    <Calendar className="h-6 w-6 text-health-blue" />
-                    <span>Schedule Growth Assessment</span>
-                  </Button>
-                  
-                  <Button 
-                    variant="outline" 
-                    className="h-auto py-6 flex flex-col items-center justify-center gap-2 hover-card-effect"
-                    onClick={() => document.getElementById('growth-data-form-button')?.click()}
-                  >
-                    <Plus className="h-6 w-6 text-health-pink" />
-                    <span>Add New Measurements</span>
-                  </Button>
-                  
-                  <Button 
-                    variant="outline" 
-                    className="h-auto py-6 flex flex-col items-center justify-center gap-2 hover-card-effect"
-                  >
-                    <Calendar className="h-6 w-6 text-health-mint" />
-                    <span>Export Growth Data</span>
-                  </Button>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="symptoms" className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <BabyActivitiesTracker />
                 <SymptomsTracker />
-              </TabsContent>
+              </div>
               
-              <TabsContent value="appointments" className="space-y-6">
-                <EnhancedAppointments />
-              </TabsContent>
+              <div className="mb-6">
+                <ParentingLessons />
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="growth" className="space-y-6">
+              <div className="mb-6">
+                <ImprovedGrowthChart />
+              </div>
               
-              <TabsContent value="documents" className="space-y-6">
-                <Tabs defaultValue="verify" value={activeFeatureTab} onValueChange={setActiveFeatureTab}>
-                  <TabsList className="mb-6">
-                    <TabsTrigger value="verify">Verify Documents</TabsTrigger>
-                    <TabsTrigger value="scan">Scan Documents</TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="verify">
-                    <EnhancedDocumentVerification />
-                  </TabsContent>
-                  
-                  <TabsContent value="scan">
-                    <EnhancedDocumentScanner />
-                  </TabsContent>
-                </Tabs>
-              </TabsContent>
-            </Tabs>
-          </div>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-start">
+                <AlertCircle className="h-5 w-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
+                <div>
+                  <p className="text-blue-800 font-medium">Why track growth?</p>
+                  <p className="text-blue-700 text-sm">
+                    Regular growth tracking helps ensure your baby is developing properly and can identify potential health issues early.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Button 
+                  variant="outline" 
+                  className="h-auto py-6 flex flex-col items-center justify-center gap-2"
+                >
+                  <Calendar className="h-6 w-6 text-health-blue" />
+                  <span>Schedule Growth Assessment</span>
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  className="h-auto py-6 flex flex-col items-center justify-center gap-2"
+                >
+                  <Calendar className="h-6 w-6 text-health-pink" />
+                  <span>Add New Measurements</span>
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  className="h-auto py-6 flex flex-col items-center justify-center gap-2"
+                >
+                  <Calendar className="h-6 w-6 text-health-mint" />
+                  <span>Export Growth Data</span>
+                </Button>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="symptoms" className="space-y-6">
+              <SymptomsTracker />
+            </TabsContent>
+            
+            <TabsContent value="appointments" className="space-y-6">
+              <EnhancedAppointments />
+            </TabsContent>
+            
+            <TabsContent value="documents" className="space-y-6">
+              <Tabs defaultValue="verify" value={activeFeatureTab} onValueChange={setActiveFeatureTab}>
+                <TabsList className="mb-6">
+                  <TabsTrigger value="verify">Verify Documents</TabsTrigger>
+                  <TabsTrigger value="scan">Scan Documents</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="verify">
+                  <EnhancedDocumentVerification />
+                </TabsContent>
+                
+                <TabsContent value="scan">
+                  <EnhancedDocumentScanner />
+                </TabsContent>
+              </Tabs>
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
     </div>

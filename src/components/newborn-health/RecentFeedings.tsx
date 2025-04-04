@@ -3,7 +3,6 @@ import React from 'react';
 import { Utensils, PlusCircle } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 
 interface FeedingData {
   time: string;
@@ -18,7 +17,7 @@ interface RecentFeedingsProps {
 
 const RecentFeedings: React.FC<RecentFeedingsProps> = ({ feedingData }) => {
   return (
-    <Card className="shadow-sm hover-card-effect">
+    <Card className="shadow-sm">
       <CardHeader>
         <CardTitle className="flex items-center">
           <Utensils className="mr-2 h-5 w-5 text-health-pink" />
@@ -44,12 +43,10 @@ const RecentFeedings: React.FC<RecentFeedingsProps> = ({ feedingData }) => {
         </ul>
       </CardContent>
       <CardFooter>
-        <Link to="/newborn-health?tab=feeding" className="w-full">
-          <Button variant="outline" className="w-full">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Log Feeding
-          </Button>
-        </Link>
+        <Button variant="outline" className="w-full">
+          <PlusCircle className="mr-2 h-4 w-4" />
+          Log Feeding
+        </Button>
       </CardFooter>
     </Card>
   );
