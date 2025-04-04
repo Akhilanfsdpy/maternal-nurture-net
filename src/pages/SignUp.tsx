@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,7 +13,9 @@ import {
   Lock, 
   Check, 
   X,
-  ChevronRight
+  ChevronRight,
+  Smile,
+  Frown
 } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -33,9 +35,14 @@ const SignUp: React.FC = () => {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [passwordShaking, setPasswordShaking] = useState(false);
+  const [passwordSmiling, setPasswordSmiling] = useState(false);
+  
   const navigate = useNavigate();
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const babyImageRef = useRef<HTMLImageElement>(null);
+  const motherImageRef = useRef<HTMLImageElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -52,6 +59,19 @@ const SignUp: React.FC = () => {
       if (/[0-9]/.test(value)) strength += 1;
       if (/[^A-Za-z0-9]/.test(value)) strength += 1;
       setPasswordStrength(strength);
+    }
+    
+    // Check password match for animation
+    if (name === 'confirmPassword' && formData.password) {
+      if (value !== formData.password && value.length > 3) {
+        setPasswordShaking(true);
+        setPasswordSmiling(false);
+        setTimeout(() => setPasswordShaking(false), 600);
+      } else if (value === formData.password && value.length > 3) {
+        setPasswordSmiling(true);
+        setPasswordShaking(false);
+        setTimeout(() => setPasswordSmiling(false), 600);
+      }
     }
   };
 
@@ -82,6 +102,13 @@ const SignUp: React.FC = () => {
           description: "Password must be at least 8 characters",
           variant: "destructive"
         });
+        
+        if (babyImageRef.current) {
+          babyImageRef.current.classList.add('head-shake');
+          setTimeout(() => {
+            babyImageRef.current?.classList.remove('head-shake');
+          }, 600);
+        }
         return false;
       }
       
@@ -91,6 +118,13 @@ const SignUp: React.FC = () => {
           description: "Please ensure both passwords match",
           variant: "destructive"
         });
+        
+        if (babyImageRef.current) {
+          babyImageRef.current.classList.add('head-shake');
+          setTimeout(() => {
+            babyImageRef.current?.classList.remove('head-shake');
+          }, 600);
+        }
         return false;
       }
       
@@ -100,7 +134,24 @@ const SignUp: React.FC = () => {
           description: "Please include uppercase, numbers, and special characters",
           variant: "destructive"
         });
+        
+        if (babyImageRef.current) {
+          babyImageRef.current.classList.add('head-shake');
+          setTimeout(() => {
+            babyImageRef.current?.classList.remove('head-shake');
+          }, 600);
+        }
         return false;
+      }
+      
+      // Show happy animation for success
+      if (babyImageRef.current && motherImageRef.current) {
+        babyImageRef.current.classList.add('head-nod');
+        motherImageRef.current.classList.add('head-nod');
+        setTimeout(() => {
+          babyImageRef.current?.classList.remove('head-nod');
+          motherImageRef.current?.classList.remove('head-nod');
+        }, 600);
       }
       
       return true;
@@ -221,6 +272,30 @@ const SignUp: React.FC = () => {
           {/* Background decorations */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full transform translate-x-1/3 -translate-y-1/3"></div>
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/5 rounded-full transform -translate-x-1/3 translate-y-1/3"></div>
+          
+          {/* Animated mother and baby illustrations */}
+          <div className="absolute bottom-8 right-8 flex items-end">
+            <div className="relative w-32 h-32 mr-4">
+              <img 
+                src="/mother-illustration.svg" 
+                alt="Mother" 
+                className="w-full h-full object-contain"
+                ref={motherImageRef}
+              />
+            </div>
+            <div className="relative w-24 h-24">
+              <img 
+                src="/baby-illustration.svg" 
+                alt="Baby" 
+                className={cn(
+                  "w-full h-full object-contain transition-all",
+                  passwordShaking ? "head-shake" : "",
+                  passwordSmiling ? "head-nod" : ""
+                )}
+                ref={babyImageRef}
+              />
+            </div>
+          </div>
         </div>
         
         {/* Right side - Form */}
@@ -289,15 +364,26 @@ const SignUp: React.FC = () => {
                 <div className="space-y-6 flex-1">
                   <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      placeholder="Create a strong password"
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="Create a strong password"
+                        required
+                      />
+                      {passwordStrength > 0 && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                          {passwordStrength < 3 ? (
+                            <Frown className="h-5 w-5 text-yellow-500" />
+                          ) : (
+                            <Smile className="h-5 w-5 text-green-500" />
+                          )}
+                        </div>
+                      )}
+                    </div>
                     
                     {/* Password strength indicator */}
                     <div className="mt-2">
@@ -355,15 +441,26 @@ const SignUp: React.FC = () => {
                   
                   <div className="space-y-2">
                     <Label htmlFor="confirmPassword">Confirm Password</Label>
-                    <Input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type="password"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      placeholder="Confirm your password"
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        placeholder="Confirm your password"
+                        required
+                      />
+                      {formData.confirmPassword && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                          {formData.password === formData.confirmPassword ? (
+                            <Smile className="h-5 w-5 text-green-500" />
+                          ) : (
+                            <Frown className="h-5 w-5 text-red-500" />
+                          )}
+                        </div>
+                      )}
+                    </div>
                     
                     {formData.password && formData.confirmPassword && (
                       <div className="flex items-center mt-1 text-xs">
@@ -390,7 +487,7 @@ const SignUp: React.FC = () => {
                   <div className="space-y-4">
                     <div 
                       className={cn(
-                        "relative p-4 rounded-lg border-2 transition-all cursor-pointer",
+                        "relative p-4 rounded-lg border-2 transition-all cursor-pointer hover-card-effect",
                         formData.userType === 'parent' 
                           ? "border-health-blue bg-health-blue/5" 
                           : "border-gray-200 hover:border-gray-300"
@@ -417,7 +514,7 @@ const SignUp: React.FC = () => {
                     
                     <div 
                       className={cn(
-                        "relative p-4 rounded-lg border-2 transition-all cursor-pointer",
+                        "relative p-4 rounded-lg border-2 transition-all cursor-pointer hover-card-effect",
                         formData.userType === 'doctor' 
                           ? "border-health-blue bg-health-blue/5" 
                           : "border-gray-200 hover:border-gray-300"
@@ -444,7 +541,7 @@ const SignUp: React.FC = () => {
                     
                     <div 
                       className={cn(
-                        "relative p-4 rounded-lg border-2 transition-all cursor-pointer",
+                        "relative p-4 rounded-lg border-2 transition-all cursor-pointer hover-card-effect",
                         formData.userType === 'caregiver' 
                           ? "border-health-blue bg-health-blue/5" 
                           : "border-gray-200 hover:border-gray-300"
