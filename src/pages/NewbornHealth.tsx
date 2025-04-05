@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,8 @@ import SymptomsTracker from '@/components/newborn-health/SymptomsTracker';
 import ImprovedGrowthChart from '@/components/newborn-health/ImprovedGrowthChart';
 import EnhancedDocumentVerification from '@/components/newborn-health/EnhancedDocumentVerification';
 import EnhancedDocumentScanner from '@/components/newborn-health/EnhancedDocumentScanner';
+import VaccinationsTabContent from '@/components/newborn-health/VaccinationsTabContent';
+import BirthCertificateTabContent from '@/components/newborn-health/BirthCertificateTabContent';
 
 const NewbornHealth: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -64,12 +67,12 @@ const NewbornHealth: React.FC = () => {
             </TabsList>
             
             <TabsContent value="overview" className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <ImprovedGrowthChart />
                 <HealthCheckupScheduler open={showScheduler} setOpen={setShowScheduler} />
               </div>
               
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <BabyActivitiesTracker />
                 <SymptomsTracker />
               </div>
@@ -94,7 +97,7 @@ const NewbornHealth: React.FC = () => {
             </TabsContent>
             
             <TabsContent value="vaccinations" className="space-y-6">
-              {/* Vaccinations content */}
+              <VaccinationsTabContent vaccinations={vaccinations} />
             </TabsContent>
             
             <TabsContent value="documents" className="space-y-6">
@@ -115,7 +118,7 @@ const NewbornHealth: React.FC = () => {
             </TabsContent>
             
             <TabsContent value="birthcertificate" className="space-y-6">
-              {/* Birth Certificate content */}
+              <BirthCertificateTabContent />
             </TabsContent>
           </Tabs>
         </div>

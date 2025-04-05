@@ -9,11 +9,9 @@ import TabContent from '@/components/maternal-health/TabContent';
 import VideoRecommendations from '@/components/maternal-health/VideoRecommendations';
 import MedicalReportGenerator from '@/components/maternal-health/MedicalReportGenerator';
 import HealthDataForm from '@/components/maternal-health/HealthDataForm';
-import AppointmentScheduler from '@/components/maternal-health/AppointmentScheduler';
 
 const MaternalHealth: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [isAppointmentSchedulerOpen, setIsAppointmentSchedulerOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -28,10 +26,6 @@ const MaternalHealth: React.FC = () => {
               <p className="text-gray-500">Track, monitor, and manage your pregnancy journey</p>
             </div>
             <div className="flex gap-3">
-              <AppointmentScheduler 
-                isOpen={isAppointmentSchedulerOpen} 
-                setIsOpen={setIsAppointmentSchedulerOpen} 
-              />
               <HealthDataForm />
             </div>
           </div>
