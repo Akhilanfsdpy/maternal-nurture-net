@@ -54,6 +54,29 @@
     flex-direction: column;
     gap: 0.5rem;
   }
+  
+  /* Verification form adjustments */
+  .verification-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .verification-keys {
+    flex-direction: column;
+  }
+  
+  .verification-step {
+    padding: 0.75rem;
+  }
+  
+  /* Scanner interface adjustments */
+  .scanner-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .preview-container {
+    max-height: 200px;
+  }
 }
 
 /* Small devices (tablets, 641px and up) */
@@ -94,6 +117,15 @@
     align-items: flex-start;
     gap: 0.75rem;
   }
+  
+  /* Verification form adjustments */
+  .verification-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .verification-step {
+    padding: 1rem;
+  }
 }
 
 /* Medium devices (laptops, 769px and up) */
@@ -122,6 +154,11 @@
   /* Document layout improvements */
   .document-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Scanner layout */
+  .scanner-container {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -307,4 +344,79 @@
   .sos-emergency-button {
     width: 100%;
   }
+}
+
+/* Enhanced document verification styles */
+.security-level-button {
+  transition: all 0.2s;
+}
+
+.security-level-button.active {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.verification-progress-container {
+  margin: 1.5rem 0;
+}
+
+.verification-steps {
+  margin-top: 1rem;
+}
+
+.verification-input-container {
+  position: relative;
+}
+
+.verification-input-container .eye-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* Document scanner styles */
+.scanner-preview {
+  aspect-ratio: 16/9;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scanner-dropzone {
+  border: 2px dashed #d1d5db;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.scanner-dropzone:hover {
+  border-color: #9ca3af;
+}
+
+.scan-result-container {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.scan-confidence-low {
+  background-color: #fee2e2;
+}
+
+.scan-confidence-medium {
+  background-color: #fef3c7;
+}
+
+.scan-confidence-high {
+  background-color: #d1fae5;
 }

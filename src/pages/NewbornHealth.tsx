@@ -20,12 +20,12 @@ import EnhancedDocumentScanner from '@/components/newborn-health/EnhancedDocumen
 import VaccinationsTabContent from '@/components/newborn-health/VaccinationsTabContent';
 import BirthCertificateTabContent from '@/components/newborn-health/BirthCertificateTabContent';
 import EnhancedDocumentsTabContent from '@/components/newborn-health/EnhancedDocumentsTabContent';
+import PrescriptionScanner from '@/components/prescriptions/PrescriptionScanner';
 import { useToast } from '@/hooks/use-toast';
 import '@/styles/responsive.css';
 
 const NewbornHealth: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [activeFeatureTab, setActiveFeatureTab] = useState('verify');
   const [showScheduler, setShowScheduler] = useState(false);
   const isMobile = useIsMobile();
   const { toast } = useToast();
@@ -88,6 +88,7 @@ const NewbornHealth: React.FC = () => {
                 <TabsTrigger value="vaccinations">Vaccinations</TabsTrigger>
                 <TabsTrigger value="documents">Documents</TabsTrigger>
                 <TabsTrigger value="birthcertificate">Birth Certificate</TabsTrigger>
+                <TabsTrigger value="prescriptions">Prescriptions</TabsTrigger>
               </TabsList>
             </div>
             
@@ -130,6 +131,12 @@ const NewbornHealth: React.FC = () => {
             
             <TabsContent value="birthcertificate" className="space-y-6">
               <BirthCertificateTabContent />
+            </TabsContent>
+            
+            <TabsContent value="prescriptions" className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <PrescriptionScanner />
+              </div>
             </TabsContent>
           </Tabs>
         </div>

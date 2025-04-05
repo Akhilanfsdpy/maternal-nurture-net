@@ -213,7 +213,7 @@ const EnhancedDocumentVerification: React.FC = () => {
               {securityLevel === 'government' && " Government security adds official records verification."}
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 verification-container">
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-medium flex items-center">
@@ -229,7 +229,7 @@ const EnhancedDocumentVerification: React.FC = () => {
                     {showParentKey ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
                   </Button>
                 </div>
-                <div className="relative">
+                <div className="relative verification-input-container">
                   <Input 
                     type={showParentKey ? "text" : "password"}
                     value={parentKey}
@@ -269,7 +269,7 @@ const EnhancedDocumentVerification: React.FC = () => {
                     {showDoctorKey ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
                   </Button>
                 </div>
-                <div className="relative">
+                <div className="relative verification-input-container">
                   <Input 
                     type={showDoctorKey ? "text" : "password"}
                     value={doctorKey}
@@ -297,7 +297,6 @@ const EnhancedDocumentVerification: React.FC = () => {
             
             <Button 
               onClick={handleVerify}
-              variant="outline" 
               className="w-full mt-2"
               disabled={verificationStatus === 'processing'}
             >
@@ -306,18 +305,18 @@ const EnhancedDocumentVerification: React.FC = () => {
             </Button>
             
             {verificationStatus === 'processing' && (
-              <div className="space-y-4 mt-4">
+              <div className="space-y-4 mt-4 verification-progress-container">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-medium text-gray-700">Verification in progress</span>
                   <span className="text-sm font-medium text-gray-700">{verificationProgress}%</span>
                 </div>
                 <Progress value={verificationProgress} className="w-full" />
                 
-                <div className="space-y-3">
+                <div className="space-y-3 verification-steps">
                   {verificationSteps.map(step => (
                     <div 
                       key={step.id} 
-                      className={`flex items-start p-2 rounded-md ${
+                      className={`flex items-start p-2 rounded-md verification-step ${
                         step.status === 'success' ? 'bg-green-50' :
                         step.status === 'error' ? 'bg-red-50' :
                         step.status === 'processing' ? 'bg-blue-50' : 'bg-gray-50'
