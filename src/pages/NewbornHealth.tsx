@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Calendar } from 'lucide-react';
+import { Calendar, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
@@ -19,15 +19,26 @@ import EnhancedDocumentVerification from '@/components/newborn-health/EnhancedDo
 import EnhancedDocumentScanner from '@/components/newborn-health/EnhancedDocumentScanner';
 import VaccinationsTabContent from '@/components/newborn-health/VaccinationsTabContent';
 import BirthCertificateTabContent from '@/components/newborn-health/BirthCertificateTabContent';
+import { useToast } from '@/hooks/use-toast';
 
 const NewbornHealth: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [activeFeatureTab, setActiveFeatureTab] = useState('verify');
   const [showScheduler, setShowScheduler] = useState(false);
   const isMobile = useIsMobile();
+  const { toast } = useToast();
 
   const handleScheduleClick = () => {
     setShowScheduler(true);
+  };
+
+  const handleSosClick = () => {
+    toast({
+      title: "Emergency Alert",
+      description: "Emergency contact has been notified. Help is on the way.",
+      variant: "destructive",
+    });
+    // In a real app, this would trigger actual emergency notifications
   };
 
   return (
@@ -43,6 +54,14 @@ const NewbornHealth: React.FC = () => {
               <p className="text-gray-500">Track, monitor, and manage your baby's health and development</p>
             </div>
             <div className="flex flex-wrap gap-3">
+              <Button 
+                variant="destructive" 
+                className="bg-red-600 hover:bg-red-700"
+                onClick={handleSosClick}
+              >
+                <AlertCircle className="mr-2 h-4 w-4" />
+                SOS Emergency
+              </Button>
               <Button 
                 variant="outline" 
                 className="border-health-light-pink text-health-pink"
@@ -69,15 +88,14 @@ const NewbornHealth: React.FC = () => {
             <TabsContent value="overview" className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <ImprovedGrowthChart />
-                <HealthCheckupScheduler open={showScheduler} setOpen={setShowScheduler} />
+                <div className="flex flex-col space-y-6">
+                  <HealthCheckupScheduler open={showScheduler} setOpen={setShowScheduler} />
+                  <BabyActivitiesTracker />
+                </div>
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <BabyActivitiesTracker />
                 <SymptomsTracker />
-              </div>
-              
-              <div className="mb-6">
                 <ParentingLessons />
               </div>
             </TabsContent>
