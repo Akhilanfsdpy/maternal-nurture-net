@@ -36,6 +36,24 @@
   .responsive-full-width-xs {
     width: 100%;
   }
+  
+  /* Document view adjustments */
+  .document-card {
+    flex-direction: column;
+  }
+  
+  .document-actions {
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  /* Button adjustments */
+  .action-buttons {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 
 /* Small devices (tablets, 641px and up) */
@@ -69,6 +87,13 @@
     flex-direction: column;
     align-items: stretch;
   }
+  
+  /* Document view adjustments */
+  .document-status-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
 }
 
 /* Medium devices (laptops, 769px and up) */
@@ -92,6 +117,11 @@
   
   .responsive-chart {
     height: 300px;
+  }
+  
+  /* Document layout improvements */
+  .document-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -189,6 +219,14 @@
     margin: 0;
     padding: 0;
   }
+  
+  /* Document-specific print styles */
+  .document-card {
+    break-inside: avoid;
+    margin-bottom: 1.5cm;
+    border: 1px solid #ddd;
+    padding: 1cm;
+  }
 }
 
 /* Dark mode optimizations */
@@ -204,5 +242,69 @@
   
   .dark-mode-shadow {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Document card dark mode */
+  .document-card.dark-mode {
+    background-color: #222;
+    border-color: #444;
+  }
+  
+  .document-status.dark-mode {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Newborn Health page specific styles */
+.newborn-health-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+
+.document-list {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .newborn-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 0.5rem;
+  }
+  
+  .action-buttons-container {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .action-button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Fix for tabs on mobile */
+@media (max-width: 640px) {
+  .tabs-list-container {
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  
+  .tabs-list {
+    min-width: max-content;
+  }
+  
+  .sos-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  
+  .sos-emergency-button {
+    width: 100%;
   }
 }

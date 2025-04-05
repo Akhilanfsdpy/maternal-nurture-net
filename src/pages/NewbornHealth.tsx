@@ -19,7 +19,9 @@ import EnhancedDocumentVerification from '@/components/newborn-health/EnhancedDo
 import EnhancedDocumentScanner from '@/components/newborn-health/EnhancedDocumentScanner';
 import VaccinationsTabContent from '@/components/newborn-health/VaccinationsTabContent';
 import BirthCertificateTabContent from '@/components/newborn-health/BirthCertificateTabContent';
+import EnhancedDocumentsTabContent from '@/components/newborn-health/EnhancedDocumentsTabContent';
 import { useToast } from '@/hooks/use-toast';
+import '@/styles/responsive.css';
 
 const NewbornHealth: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -53,10 +55,10 @@ const NewbornHealth: React.FC = () => {
               <h1 className="text-3xl font-bold mb-2">Newborn Health</h1>
               <p className="text-gray-500">Track, monitor, and manage your baby's health and development</p>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 w-full md:w-auto justify-between md:justify-end">
               <Button 
                 variant="destructive" 
-                className="bg-red-600 hover:bg-red-700"
+                className="bg-red-600 hover:bg-red-700 w-full sm:w-auto"
                 onClick={handleSosClick}
               >
                 <AlertCircle className="mr-2 h-4 w-4" />
@@ -64,26 +66,30 @@ const NewbornHealth: React.FC = () => {
               </Button>
               <Button 
                 variant="outline" 
-                className="border-health-light-pink text-health-pink"
+                className="border-health-light-pink text-health-pink w-full sm:w-auto"
                 onClick={handleScheduleClick}
               >
                 <Calendar className="mr-2 h-4 w-4" />
                 Schedule Checkup
               </Button>
-              <GrowthDataForm />
+              <div className="w-full sm:w-auto">
+                <GrowthDataForm />
+              </div>
             </div>
           </div>
           
           <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="bg-white rounded-lg p-1 shadow-sm mb-6">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="growth">Growth</TabsTrigger>
-              <TabsTrigger value="symptoms">Symptoms</TabsTrigger>
-              <TabsTrigger value="appointments">Appointments</TabsTrigger>
-              <TabsTrigger value="vaccinations">Vaccinations</TabsTrigger>
-              <TabsTrigger value="documents">Documents</TabsTrigger>
-              <TabsTrigger value="birthcertificate">Birth Certificate</TabsTrigger>
-            </TabsList>
+            <div className="overflow-x-auto">
+              <TabsList className="bg-white rounded-lg p-1 shadow-sm mb-6 min-w-max">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="growth">Growth</TabsTrigger>
+                <TabsTrigger value="symptoms">Symptoms</TabsTrigger>
+                <TabsTrigger value="appointments">Appointments</TabsTrigger>
+                <TabsTrigger value="vaccinations">Vaccinations</TabsTrigger>
+                <TabsTrigger value="documents">Documents</TabsTrigger>
+                <TabsTrigger value="birthcertificate">Birth Certificate</TabsTrigger>
+              </TabsList>
+            </div>
             
             <TabsContent value="overview" className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -119,20 +125,7 @@ const NewbornHealth: React.FC = () => {
             </TabsContent>
             
             <TabsContent value="documents" className="space-y-6">
-              <Tabs defaultValue="verify" value={activeFeatureTab} onValueChange={setActiveFeatureTab}>
-                <TabsList className="mb-6">
-                  <TabsTrigger value="verify">Verify Documents</TabsTrigger>
-                  <TabsTrigger value="scan">Scan Documents</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="verify">
-                  <EnhancedDocumentVerification />
-                </TabsContent>
-                
-                <TabsContent value="scan">
-                  <EnhancedDocumentScanner />
-                </TabsContent>
-              </Tabs>
+              <EnhancedDocumentsTabContent />
             </TabsContent>
             
             <TabsContent value="birthcertificate" className="space-y-6">
