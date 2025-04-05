@@ -1,19 +1,16 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/hooks/use-toast';
-import { Shield, Key, CheckCircle, XCircle, QrCode, FileSignature, Download, Eye, EyeOff, Fingerprint, Lock, Scan } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-
-interface VerificationStep {
-  id: number;
-  name: string;
-  status: 'pending' | 'processing' | 'success' | 'error';
-  description: string;
-}
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Shield, Lock, QrCode } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import SecurityLevelSelector from './document-verification/SecurityLevelSelector';
+import KeyInput from './document-verification/KeyInput';
+import VerificationProgress from './document-verification/VerificationProgress';
+import VerificationResult from './document-verification/VerificationResult';
+import QRCodeGenerator from './document-verification/QRCodeGenerator';
+import { VerificationStep } from './document-verification/VerificationProgress';
 
 const EnhancedDocumentVerification: React.FC = () => {
   const [parentKey, setParentKey] = useState('');
@@ -24,8 +21,6 @@ const EnhancedDocumentVerification: React.FC = () => {
   const [generatedQR, setGeneratedQR] = useState<string | null>(null);
   const [certificateGenerated, setCertificateGenerated] = useState(false);
   const [securityLevel, setSecurityLevel] = useState<'standard' | 'enhanced' | 'government'>('enhanced');
-  const [showDoctorKey, setShowDoctorKey] = useState(false);
-  const [showParentKey, setShowParentKey] = useState(false);
   const [verificationSteps, setVerificationSteps] = useState<VerificationStep[]>([
     { id: 1, name: 'Key Authentication', status: 'pending', description: 'Verify parent and doctor keys match' },
     { id: 2, name: 'Blockchain Validation', status: 'pending', description: 'Validate record on decentralized ledger' },
@@ -139,19 +134,6 @@ const EnhancedDocumentVerification: React.FC = () => {
     // In a real app, this would generate and download a PDF
   };
 
-  const getStepIcon = (step: VerificationStep) => {
-    switch (step.status) {
-      case 'success':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'error':
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      case 'processing':
-        return <div className="h-5 w-5 rounded-full border-2 border-blue-500 border-t-transparent animate-spin" />;
-      default:
-        return <div className="h-5 w-5 rounded-full border border-gray-300" />;
-    }
-  };
-
   return (
     <Card className="shadow-sm">
       <CardHeader>
@@ -177,35 +159,10 @@ const EnhancedDocumentVerification: React.FC = () => {
           </TabsList>
           
           <TabsContent value="verify" className="space-y-4 pt-4">
-            <div className="flex flex-wrap gap-2 mb-4">
-              <Button 
-                onClick={() => setSecurityLevel('standard')}
-                variant={securityLevel === 'standard' ? 'default' : 'outline'}
-                size="sm"
-                className={securityLevel === 'standard' ? 'bg-health-blue' : ''}
-              >
-                <Shield className="h-3.5 w-3.5 mr-1" />
-                Standard
-              </Button>
-              <Button 
-                onClick={() => setSecurityLevel('enhanced')}
-                variant={securityLevel === 'enhanced' ? 'default' : 'outline'}
-                size="sm"
-                className={securityLevel === 'enhanced' ? 'bg-health-blue' : ''}
-              >
-                <Fingerprint className="h-3.5 w-3.5 mr-1" />
-                Enhanced
-              </Button>
-              <Button 
-                onClick={() => setSecurityLevel('government')}
-                variant={securityLevel === 'government' ? 'default' : 'outline'}
-                size="sm"
-                className={securityLevel === 'government' ? 'bg-health-blue' : ''}
-              >
-                <Lock className="h-3.5 w-3.5 mr-1" />
-                Government
-              </Button>
-            </div>
+            <SecurityLevelSelector 
+              securityLevel={securityLevel}
+              setSecurityLevel={setSecurityLevel}
+            />
             
             <p className="text-sm text-gray-600">
               Our multi-factor verification system ensures document authenticity using blockchain and cryptographic verification.
@@ -214,85 +171,21 @@ const EnhancedDocumentVerification: React.FC = () => {
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 verification-container">
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <label className="text-sm font-medium flex items-center">
-                    <Key className="h-4 w-4 mr-2 text-health-pink" />
-                    Parent Verification Key
-                  </label>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={() => setShowParentKey(!showParentKey)}
-                  >
-                    {showParentKey ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-                  </Button>
-                </div>
-                <div className="relative verification-input-container">
-                  <Input 
-                    type={showParentKey ? "text" : "password"}
-                    value={parentKey}
-                    onChange={(e) => setParentKey(e.target.value)}
-                    placeholder="Enter parent's verification key" 
-                    className="border-health-pink/20 focus:border-health-pink pr-8" 
-                  />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6 absolute right-1 top-1/2 -translate-y-1/2"
-                    onClick={() => {
-                      // In a real app, this might open a QR scanner
-                      toast({
-                        title: "Scan Parent Key",
-                        description: "Camera would open to scan QR code in a production app.",
-                      });
-                    }}
-                  >
-                    <Scan className="h-3.5 w-3.5 text-gray-400" />
-                  </Button>
-                </div>
-              </div>
+              <KeyInput
+                label="Parent Verification Key"
+                value={parentKey}
+                onChange={setParentKey}
+                colorClass="text-health-pink"
+                placeholder="Enter parent's verification key"
+              />
               
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <label className="text-sm font-medium flex items-center">
-                    <Key className="h-4 w-4 mr-2 text-health-blue" />
-                    Doctor Verification Key
-                  </label>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={() => setShowDoctorKey(!showDoctorKey)}
-                  >
-                    {showDoctorKey ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-                  </Button>
-                </div>
-                <div className="relative verification-input-container">
-                  <Input 
-                    type={showDoctorKey ? "text" : "password"}
-                    value={doctorKey}
-                    onChange={(e) => setDoctorKey(e.target.value)} 
-                    placeholder="Enter doctor's verification key" 
-                    className="border-health-blue/20 focus:border-health-blue pr-8" 
-                  />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6 absolute right-1 top-1/2 -translate-y-1/2"
-                    onClick={() => {
-                      // In a real app, this might open a QR scanner
-                      toast({
-                        title: "Scan Doctor Key",
-                        description: "Camera would open to scan QR code in a production app.",
-                      });
-                    }}
-                  >
-                    <Scan className="h-3.5 w-3.5 text-gray-400" />
-                  </Button>
-                </div>
-              </div>
+              <KeyInput
+                label="Doctor Verification Key"
+                value={doctorKey}
+                onChange={setDoctorKey}
+                colorClass="text-health-blue"
+                placeholder="Enter doctor's verification key"
+              />
             </div>
             
             <Button 
@@ -305,160 +198,31 @@ const EnhancedDocumentVerification: React.FC = () => {
             </Button>
             
             {verificationStatus === 'processing' && (
-              <div className="space-y-4 mt-4 verification-progress-container">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-gray-700">Verification in progress</span>
-                  <span className="text-sm font-medium text-gray-700">{verificationProgress}%</span>
-                </div>
-                <Progress value={verificationProgress} className="w-full" />
-                
-                <div className="space-y-3 verification-steps">
-                  {verificationSteps.map(step => (
-                    <div 
-                      key={step.id} 
-                      className={`flex items-start p-2 rounded-md verification-step ${
-                        step.status === 'success' ? 'bg-green-50' :
-                        step.status === 'error' ? 'bg-red-50' :
-                        step.status === 'processing' ? 'bg-blue-50' : 'bg-gray-50'
-                      }`}
-                    >
-                      <div className="mr-3 mt-0.5">
-                        {getStepIcon(step)}
-                      </div>
-                      <div>
-                        <h4 className={`text-sm font-medium ${
-                          step.status === 'success' ? 'text-green-700' :
-                          step.status === 'error' ? 'text-red-700' :
-                          step.status === 'processing' ? 'text-blue-700' : 'text-gray-700'
-                        }`}>
-                          {step.name}
-                        </h4>
-                        <p className="text-xs text-gray-600">{step.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <VerificationProgress 
+                progress={verificationProgress}
+                steps={verificationSteps}
+              />
             )}
             
-            {verificationStatus === 'verified' && (
-              <div className="space-y-4 mt-4">
-                <div className="bg-green-50 p-3 rounded-md flex items-start">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 mr-2 flex-shrink-0" />
-                  <div>
-                    <p className="text-green-800 font-medium">Document Verified</p>
-                    <p className="text-green-700 text-sm">This document has been cryptographically verified and is authentic.</p>
-                  </div>
-                </div>
-                
-                {certificateGenerated && (
-                  <Card className="p-4 border-green-200 bg-green-50 shadow-none">
-                    <div className="text-center space-y-3">
-                      <div className="flex justify-center">
-                        <FileSignature className="h-10 w-10 text-green-600" />
-                      </div>
-                      <h3 className="font-medium text-green-800">Digital Certificate Generated</h3>
-                      <p className="text-sm text-green-700">
-                        Your certificate has been digitally signed and blockchain-verified.
-                      </p>
-                      <div className="flex justify-center pt-2">
-                        <Button 
-                          onClick={handleDownloadPDF}
-                          className="bg-green-600 hover:bg-green-700"
-                        >
-                          <Download className="h-4 w-4 mr-2" />
-                          Download Certificate PDF
-                        </Button>
-                      </div>
-                      
-                      {generatedQR && (
-                        <div className="mt-4 flex flex-col items-center">
-                          <p className="text-sm text-green-700 mb-2">Certificate QR Code</p>
-                          <div className="h-32 w-32 border border-green-300 bg-white flex items-center justify-center">
-                            <QrCode className="h-20 w-20 text-green-800" />
-                          </div>
-                          <p className="mt-2 text-xs text-green-600">
-                            Scan to access baby's growth and health records
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </Card>
-                )}
-              </div>
-            )}
-            
-            {verificationStatus === 'failed' && (
-              <div className="bg-red-50 p-3 rounded-md flex items-start mt-4">
-                <XCircle className="h-5 w-5 text-red-600 mt-0.5 mr-2 flex-shrink-0" />
-                <div>
-                  <p className="text-red-800 font-medium">Verification Failed</p>
-                  <p className="text-red-700 text-sm">The keys don't match or are invalid. Please check and try again.</p>
-                </div>
-              </div>
+            {(verificationStatus === 'verified' || verificationStatus === 'failed') && (
+              <VerificationResult 
+                status={verificationStatus}
+                certificateGenerated={certificateGenerated}
+                generatedQR={generatedQR}
+                onDownload={handleDownloadPDF}
+              />
             )}
           </TabsContent>
           
           <TabsContent value="qr" className="space-y-4 pt-4">
-            <p className="text-sm text-gray-600">
-              Generate a QR code that links to your child's health records. This QR code can be scanned to access growth charts, 
-              appointment scheduling, feeding logs, and other health information.
-            </p>
-            
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Document Type</label>
-                <select 
-                  value={documentType}
-                  onChange={(e) => setDocumentType(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                >
-                  <option value="birth-certificate">Birth Certificate</option>
-                  <option value="vaccination">Vaccination Record</option>
-                  <option value="health-checkup">Health Checkup Report</option>
-                  <option value="growth-chart">Growth Chart</option>
-                  <option value="feeding-schedule">Feeding Schedule</option>
-                </select>
-              </div>
-              
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Document ID</label>
-                <Input 
-                  value={documentId}
-                  onChange={(e) => setDocumentId(e.target.value)}
-                  placeholder="Enter document ID" 
-                />
-              </div>
-            </div>
-            
-            <Button 
-              onClick={handleGenerateQR}
-              className="w-full bg-gradient-to-r from-health-blue to-health-light-blue"
-            >
-              <QrCode className="mr-2 h-4 w-4" />
-              Generate QR Code
-            </Button>
-            
-            {generatedQR && (
-              <div className="mt-4 flex flex-col items-center p-4 border border-gray-200 rounded-lg">
-                <div className="h-40 w-40 border border-gray-300 bg-gray-100 flex items-center justify-center">
-                  <QrCode className="h-20 w-20 text-gray-800" />
-                </div>
-                <p className="mt-2 text-sm text-gray-600">{documentType} - ID: {documentId}</p>
-                <p className="text-xs text-gray-500 mt-1 text-center">
-                  Scanning this QR code redirects to your child's health dashboard with growth tracking, appointment scheduling, and health records.
-                </p>
-                <div className="flex gap-2 mt-3">
-                  <Button variant="outline" size="sm">
-                    <Download className="h-3 w-3 mr-1" />
-                    Download
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    Share
-                  </Button>
-                </div>
-              </div>
-            )}
+            <QRCodeGenerator
+              documentType={documentType}
+              setDocumentType={setDocumentType}
+              documentId={documentId}
+              setDocumentId={setDocumentId}
+              generatedQR={generatedQR}
+              onGenerateQR={handleGenerateQR}
+            />
           </TabsContent>
         </Tabs>
       </CardContent>
