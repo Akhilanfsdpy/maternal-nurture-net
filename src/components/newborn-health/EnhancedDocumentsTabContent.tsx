@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { FileText, Shield } from 'lucide-react';
-import EnhancedDocumentVerification from './document-verification/EnhancedDocumentVerification';
 import EnhancedDocumentScanner from './document-scanner/EnhancedDocumentScanner';
+import DocumentVerification from './DocumentVerification';
 
 const EnhancedDocumentsTabContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("scanner");
@@ -30,7 +30,7 @@ const EnhancedDocumentsTabContent: React.FC = () => {
         </TabsContent>
         
         <TabsContent value="verification">
-          <EnhancedDocumentVerification />
+          <DocumentVerification />
         </TabsContent>
       </Tabs>
     </Card>

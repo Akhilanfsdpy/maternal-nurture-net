@@ -9,19 +9,22 @@ import { Check } from 'lucide-react';
 
 import DocumentTypeSelector from './DocumentTypeSelector';
 import DocumentUploader from './DocumentUploader';
-import CameraCapture from './CameraCapture';
-import ScanningProgress from './ScanningProgress';
-import ScannedDocumentView from './ScannedDocumentView';
 import RecognizedFieldsEditor from './RecognizedFieldsEditor';
+import ScannedDocumentView from './ScannedDocumentView';
+import CameraCapture from '@/components/shared/document-scanner/CameraCapture';
+import ScanningProgress from '@/components/shared/document-scanner/ScanningProgress';
+import { useDocumentScanner, simulateDocumentCapture } from '@/utils/document-scanner/scanningUtils';
+import { ScanProgress } from '@/utils/document-scanner/types';
 
 type DocumentType = 'birth-certificate' | 'medical-record' | 'growth-chart' | 'prescription';
 
 const EnhancedDocumentScanner: React.FC = () => {
   const { toast } = useToast();
+  const { simulateScanProgress, processScanResults } = useDocumentScanner();
   const [isScanning, setIsScanning] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [scannedText, setScannedText] = useState('');
-  const [scanProgress, setScanProgress] = useState(0);
+  const [scanProgress, setScanProgress] = useState<ScanProgress>({ progress: 0 });
   const [usingCamera, setUsingCamera] = useState(false);
   const [enhancedScan, setEnhancedScan] = useState(true);
   const [documentType, setDocumentType] = useState<DocumentType>('birth-certificate');
@@ -39,90 +42,34 @@ const EnhancedDocumentScanner: React.FC = () => {
     };
     reader.readAsDataURL(file);
     
-    // In a real app, this would send the image to an OCR service
-    simulateOCRProcess();
+    // Start scanning process
+    startScanningProcess();
   };
   
-  const simulateOCRProcess = () => {
+  const startScanningProcess = async () => {
     setIsScanning(true);
-    setScanProgress(0);
+    setScanProgress({ progress: 0 });
     setConfidence(0);
     
-    // Simulate progressive OCR scanning
-    const interval = setInterval(() => {
-      setScanProgress(prev => {
-        const newProgress = prev + 5;
-        setConfidence(Math.min(newProgress * 0.9, 95));
-        
-        if (newProgress >= 100) {
-          clearInterval(interval);
-          
-          // Simulate final OCR results based on document type
-          setTimeout(() => {
-            let mockText = '';
-            let fields: Record<string, string> = {};
-            
-            switch(documentType) {
-              case 'birth-certificate':
-                mockText = "CERTIFICATE OF LIVE BIRTH\n\nChild's Name: Emma Johnson\nDate of Birth: May 15, 2023\nTime of Birth: 08:45 AM\nSex: Female\nWeight: 3.4 kg\nPlace of Birth: Memorial Hospital\n\nMother's Name: Sarah Johnson\nFather's Name: Michael Johnson\n\nCertificate Number: BC-2023-54321";
-                fields = {
-                  "Child's Name": "Emma Johnson",
-                  "Date of Birth": "May 15, 2023",
-                  "Weight": "3.4 kg",
-                  "Mother's Name": "Sarah Johnson",
-                  "Father's Name": "Michael Johnson",
-                  "Certificate Number": "BC-2023-54321"
-                };
-                break;
-              case 'medical-record':
-                mockText = "PEDIATRIC VISIT SUMMARY\n\nPatient: Noah Williams\nDOB: January 10, 2023\nVisit Date: June 2, 2023\n\nWeight: 5.8 kg (50th percentile)\nHeight: 62 cm (65th percentile)\nHead Circumference: 41 cm (60th percentile)\n\nVaccinations: DTaP (1st dose), IPV (1st dose)\n\nAssessment: Healthy development, no concerns";
-                fields = {
-                  "Patient": "Noah Williams",
-                  "DOB": "January 10, 2023",
-                  "Visit Date": "June 2, 2023",
-                  "Weight": "5.8 kg (50th percentile)",
-                  "Height": "62 cm (65th percentile)",
-                  "Head Circumference": "41 cm (60th percentile)",
-                  "Vaccinations": "DTaP (1st dose), IPV (1st dose)"
-                };
-                break;
-              case 'prescription':
-                mockText = "PRESCRIPTION\n\nPatient: Olivia Garcia\nDate: June 5, 2023\n\nRx:\n1. Amoxicillin Suspension 250mg/5mL\n   Give 5mL orally twice daily for 10 days\n\n2. Infant Acetaminophen 160mg/5mL\n   Give 2.5mL every 4-6 hours as needed for fever\n   Do not exceed 5 doses in 24 hours\n\nDr. Emma Wilson, M.D.\nPediatric License: P12345";
-                fields = {
-                  "Patient": "Olivia Garcia",
-                  "Date": "June 5, 2023",
-                  "Medication 1": "Amoxicillin Suspension 250mg/5mL",
-                  "Dosage 1": "5mL orally twice daily for 10 days",
-                  "Medication 2": "Infant Acetaminophen 160mg/5mL",
-                  "Dosage 2": "2.5mL every 4-6 hours as needed for fever",
-                  "Doctor": "Dr. Emma Wilson, M.D."
-                };
-                break;
-              default:
-                mockText = "GROWTH CHART\n\nName: Liam Rodriguez\nDOB: March 3, 2023\n\nDate: June 1, 2023\nAge: 3 months\nWeight: 6.2 kg (60th percentile)\nLength: 61 cm (55th percentile)\nHead Circumference: 40.5 cm (65th percentile)";
-                fields = {
-                  "Name": "Liam Rodriguez",
-                  "DOB": "March 3, 2023",
-                  "Age": "3 months",
-                  "Weight": "6.2 kg (60th percentile)",
-                  "Length": "61 cm (55th percentile)",
-                  "Head Circumference": "40.5 cm (65th percentile)"
-                };
-            }
-            
-            setScannedText(mockText);
-            setRecognizedFields(fields);
-            setIsScanning(false);
-            
-            toast({
-              title: "Scan Complete",
-              description: `Document successfully scanned with ${confidence.toFixed(1)}% confidence.`,
-            });
-          }, 500);
-        }
-        return newProgress;
-      });
-    }, 200);
+    await simulateScanProgress(
+      (progress) => {
+        setScanProgress(progress);
+        setConfidence(progress.confidence || 0);
+      },
+      2000,
+      10
+    );
+    
+    const result = processScanResults(
+      imagePreview || '',
+      documentType,
+      { enhancedMode: enhancedScan }
+    );
+    
+    setScannedText(result.scannedText);
+    setRecognizedFields(result.fields || {});
+    setConfidence(result.confidence || 95);
+    setIsScanning(false);
   };
   
   const startCameraCapture = () => {
@@ -139,8 +86,8 @@ const EnhancedDocumentScanner: React.FC = () => {
   
   const takePicture = () => {
     setUsingCamera(false);
-    setImagePreview("https://placehold.co/400x300/png");
-    simulateOCRProcess();
+    setImagePreview(simulateDocumentCapture());
+    startScanningProcess();
   };
 
   const exportToSystem = () => {
@@ -193,19 +140,27 @@ const EnhancedDocumentScanner: React.FC = () => {
           <>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <ScannedDocumentView 
-                  imagePreview={imagePreview} 
-                  onChangeImage={() => {
-                    setImagePreview(null);
-                    setScannedText('');
-                    setRecognizedFields({});
-                  }}
-                  isScanning={isScanning}
-                  scanProgress={scanProgress}
-                  confidence={confidence}
-                  scannedText={scannedText}
-                  setScannedText={setScannedText}
-                />
+                {isScanning ? (
+                  <ScanningProgress
+                    imagePreview={imagePreview}
+                    scanProgress={scanProgress}
+                    onChangeImage={() => setImagePreview(null)}
+                  />
+                ) : (
+                  <ScannedDocumentView 
+                    imagePreview={imagePreview} 
+                    onChangeImage={() => {
+                      setImagePreview(null);
+                      setScannedText('');
+                      setRecognizedFields({});
+                    }}
+                    isScanning={isScanning}
+                    scanProgress={scanProgress.progress}
+                    confidence={confidence}
+                    scannedText={scannedText}
+                    setScannedText={setScannedText}
+                  />
+                )}
               </div>
               
               {Object.keys(recognizedFields).length > 0 && (

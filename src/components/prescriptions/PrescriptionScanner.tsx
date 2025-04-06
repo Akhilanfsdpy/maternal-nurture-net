@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Scan, Check } from 'lucide-react';
@@ -5,17 +6,20 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { ScannedMedication } from '@/types/prescriptions';
 import ImageUploadSection from './ImageUploadSection';
-import ScanningProgress from './ScanningProgress';
 import ScannedResultView from './ScannedResultView';
-import CameraCapture from './CameraCapture';
+import CameraCapture from '@/components/shared/document-scanner/CameraCapture';
+import ScanningProgress from '@/components/shared/document-scanner/ScanningProgress';
+import { useDocumentScanner, simulateDocumentCapture } from '@/utils/document-scanner/scanningUtils';
+import { ScanProgress } from '@/utils/document-scanner/types';
 
 const PrescriptionScanner: React.FC = () => {
   const { toast } = useToast();
+  const { simulateScanProgress, processScanResults } = useDocumentScanner();
   const [isScanning, setIsScanning] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [scannedText, setScannedText] = useState('');
   const [scannedMedications, setScannedMedications] = useState<ScannedMedication[]>([]);
-  const [scanProgress, setScanProgress] = useState(0);
+  const [scanProgress, setScanProgress] = useState<ScanProgress>({ progress: 0 });
   const [usingCamera, setUsingCamera] = useState(false);
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,38 +32,29 @@ const PrescriptionScanner: React.FC = () => {
     };
     reader.readAsDataURL(file);
     
-    simulateOCRProcess();
+    startScanningProcess();
   };
   
-  const simulateOCRProcess = () => {
+  const startScanningProcess = async () => {
     setIsScanning(true);
-    setScanProgress(0);
+    setScanProgress({ progress: 0 });
     
-    const interval = setInterval(() => {
-      setScanProgress(prev => {
-        const newProgress = prev + 10;
-        if (newProgress >= 100) {
-          clearInterval(interval);
-          
-          const mockScannedText = "Prescription\n\nPatient: Jane Doe\nDate: 2023-07-15\n\nMedications:\n1. Prenatal Vitamins - 1 tablet daily\n2. Iron Supplement - 25mg twice daily\n3. Calcium Citrate - 500mg with meals";
-          setScannedText(mockScannedText);
-          
-          const mockMedications = [
-            { name: "Prenatal Vitamins", dosage: "1 tablet", frequency: "Daily" },
-            { name: "Iron Supplement", dosage: "25mg", frequency: "Twice daily" },
-            { name: "Calcium Citrate", dosage: "500mg", frequency: "With meals" }
-          ];
-          setScannedMedications(mockMedications);
-          setIsScanning(false);
-          
-          toast({
-            title: "Scan Complete",
-            description: "Prescription successfully scanned and medications identified.",
-          });
-        }
-        return newProgress;
-      });
-    }, 200);
+    await simulateScanProgress(
+      (progress) => setScanProgress(progress),
+      2000,
+      10
+    );
+    
+    const result = processScanResults(imagePreview || '', 'prescription');
+    setScannedText(result.scannedText);
+    
+    // Convert the fields to medications
+    const mockMedications = [
+      { name: "Amoxicillin Suspension", dosage: "250mg/5mL - 5mL", frequency: "Twice daily" },
+      { name: "Infant Acetaminophen", dosage: "160mg/5mL - 2.5mL", frequency: "Every 4-6 hours as needed" }
+    ];
+    setScannedMedications(mockMedications);
+    setIsScanning(false);
   };
   
   const handleAddToMedications = () => {
@@ -83,8 +78,8 @@ const PrescriptionScanner: React.FC = () => {
   
   const takePicture = () => {
     setUsingCamera(false);
-    setImagePreview("https://placehold.co/400x300/png");
-    simulateOCRProcess();
+    setImagePreview(simulateDocumentCapture());
+    startScanningProcess();
   };
   
   return (
@@ -101,8 +96,8 @@ const PrescriptionScanner: React.FC = () => {
       <CardContent className="space-y-6">
         {usingCamera ? (
           <CameraCapture
-            cancelCameraCapture={cancelCameraCapture}
-            takePicture={takePicture}
+            onCancel={cancelCameraCapture}
+            onCapture={takePicture}
           />
         ) : !imagePreview ? (
           <ImageUploadSection
@@ -115,7 +110,7 @@ const PrescriptionScanner: React.FC = () => {
               <ScanningProgress
                 imagePreview={imagePreview}
                 scanProgress={scanProgress}
-                setImagePreview={setImagePreview}
+                onChangeImage={() => setImagePreview(null)}
               />
             ) : (
               <ScannedResultView
