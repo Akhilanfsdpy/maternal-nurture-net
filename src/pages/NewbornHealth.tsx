@@ -16,7 +16,7 @@ import EnhancedAppointments from '@/components/newborn-health/EnhancedAppointmen
 import SymptomsTracker from '@/components/newborn-health/SymptomsTracker';
 import ImprovedGrowthChart from '@/components/newborn-health/ImprovedGrowthChart';
 import EnhancedDocumentVerification from '@/components/newborn-health/EnhancedDocumentVerification';
-import EnhancedDocumentScanner from '@/components/newborn-health/EnhancedDocumentScanner';
+import EnhancedDocumentScanner from '@/components/newborn-health/document-scanner/EnhancedDocumentScanner';
 import VaccinationsTabContent from '@/components/newborn-health/VaccinationsTabContent';
 import BirthCertificateTabContent from '@/components/newborn-health/BirthCertificateTabContent';
 import EnhancedDocumentsTabContent from '@/components/newborn-health/EnhancedDocumentsTabContent';
