@@ -42,20 +42,22 @@ const ChatInterface: React.FC = () => {
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <TabsList className="grid grid-cols-3 w-[80%]">
-            <TabsTrigger value="chat" className="flex items-center">
-              <MessageSquare className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Chat</span>
-            </TabsTrigger>
-            <TabsTrigger value="maternal" className="flex items-center">
-              <Stethoscope className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Maternal Health</span>
-            </TabsTrigger>
-            <TabsTrigger value="newborn" className="flex items-center">
-              <Baby className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Newborn Health</span>
-            </TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto pb-2">
+            <TabsList className="grid grid-cols-3 w-[240px] sm:w-[300px]">
+              <TabsTrigger value="chat" className="flex items-center justify-center">
+                <MessageSquare className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="text-xs sm:text-sm">Chat</span>
+              </TabsTrigger>
+              <TabsTrigger value="maternal" className="flex items-center justify-center">
+                <Stethoscope className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="text-xs sm:text-sm">Maternal</span>
+              </TabsTrigger>
+              <TabsTrigger value="newborn" className="flex items-center justify-center">
+                <Baby className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="text-xs sm:text-sm">Newborn</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
           
           <TabsContent value="chat" className="flex-grow flex flex-col">
             <ChatMessages 
@@ -149,7 +151,7 @@ const ChatInterface: React.FC = () => {
           variant="ghost" 
           size="icon" 
           onClick={toggleFullScreen}
-          className="ml-2"
+          className="ml-2 flex-shrink-0"
         >
           <Maximize2 className="h-4 w-4" />
         </Button>

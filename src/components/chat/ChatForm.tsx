@@ -22,38 +22,40 @@ const ChatForm: React.FC<ChatFormProps> = ({
   toggleTools 
 }) => {
   return (
-    <form onSubmit={onSubmit} className="p-4 border-t flex items-center space-x-2 bg-white">
+    <form onSubmit={onSubmit} className="p-2 sm:p-4 border-t flex items-center gap-2 bg-white">
       <Button
         type="button"
         variant="ghost"
         size="icon"
-        className="h-9 w-9 rounded-full flex-shrink-0"
+        className="h-8 w-8 sm:h-9 sm:w-9 rounded-full flex-shrink-0"
         onClick={toggleTools}
       >
         <span className="sr-only">Show tools</span>
-        {showTools ? <X className="h-5 w-5 text-gray-500" /> : <Baby className="h-5 w-5 text-gray-500" />}
+        {showTools ? <X className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" /> : <Baby className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />}
       </Button>
       
       <Input
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder="Type a message..."
-        className="flex-1 py-2 text-sm"
+        className="flex-1 py-1 sm:py-2 text-sm"
         autoComplete="off"
       />
       
-      <VoiceInteraction onTranscription={(text) => setInput(text)} />
+      <div className="flex-shrink-0">
+        <VoiceInteraction onTranscription={(text) => setInput(text)} />
+      </div>
       
       <Button
         type="submit"
         size="icon"
         disabled={!input.trim()}
         className={cn(
-          'rounded-full h-9 w-9',
+          'rounded-full h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0',
           'bg-gradient-to-r from-health-blue to-health-light-blue hover:shadow-md'
         )}
       >
-        <Send className="h-4 w-4 text-white" />
+        <Send className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" />
       </Button>
     </form>
   );

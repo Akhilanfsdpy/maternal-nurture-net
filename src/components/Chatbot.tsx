@@ -18,26 +18,29 @@ const Chatbot: React.FC = () => {
       <Button
         onClick={toggleChatbot}
         className={cn(
-          'fixed bottom-6 right-6 rounded-full w-14 h-14 shadow-lg flex items-center justify-center transition-all duration-300',
+          'fixed bottom-6 right-6 rounded-full w-12 h-12 sm:w-14 sm:h-14 shadow-lg flex items-center justify-center transition-all duration-300 z-50',
           'bg-gradient-to-r from-health-blue to-health-light-blue hover:shadow-xl',
           isOpen ? 'translate-y-20 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
         )}
       >
-        <MessageCircle className="h-6 w-6 text-white" />
+        <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
       </Button>
 
       {/* Chatbot window */}
       <div
         className={cn(
-          'fixed bottom-6 right-6 w-80 sm:w-96 bg-white rounded-2xl shadow-xl z-50',
+          'fixed bottom-6 right-6 w-[90%] sm:w-96 bg-white rounded-2xl shadow-xl z-50',
           'transition-all duration-500 ease-in-out transform',
           isOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0 pointer-events-none',
           'flex flex-col border border-gray-200 overflow-hidden'
         )}
-        style={{ maxHeight: 'calc(100vh - 100px)' }}
+        style={{ 
+          maxHeight: 'calc(100vh - 100px)',
+          maxWidth: 'calc(100% - 3rem)'
+        }}
       >
         {/* Header */}
-        <div className="p-4 border-b flex items-center justify-between bg-gradient-to-r from-health-blue to-health-light-blue text-white">
+        <div className="p-3 sm:p-4 border-b flex items-center justify-between bg-gradient-to-r from-health-blue to-health-light-blue text-white">
           <div className="flex items-center space-x-2">
             <MessageCircle className="h-5 w-5" />
             <h3 className="font-medium">Health Assistant</h3>
