@@ -21,6 +21,7 @@ import VaccinationsTabContent from '@/components/newborn-health/VaccinationsTabC
 import BirthCertificateTabContent from '@/components/newborn-health/BirthCertificateTabContent';
 import EnhancedDocumentsTabContent from '@/components/newborn-health/EnhancedDocumentsTabContent';
 import PrescriptionScanner from '@/components/prescriptions/PrescriptionScanner';
+import AlertPreferences from '@/components/alerts/AlertPreferences';
 import { useToast } from '@/hooks/use-toast';
 import '@/styles/responsive.css';
 
@@ -89,6 +90,7 @@ const NewbornHealth: React.FC = () => {
                 <TabsTrigger value="documents">Documents</TabsTrigger>
                 <TabsTrigger value="birthcertificate">Birth Certificate</TabsTrigger>
                 <TabsTrigger value="prescriptions">Prescriptions</TabsTrigger>
+                <TabsTrigger value="alerts">Alerts</TabsTrigger>
               </TabsList>
             </div>
             
@@ -136,6 +138,29 @@ const NewbornHealth: React.FC = () => {
             <TabsContent value="prescriptions" className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <PrescriptionScanner />
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="alerts" className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <AlertPreferences />
+                <div className="space-y-6">
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 className="text-xl font-semibold mb-4">Alert Management</h3>
+                    <p className="text-gray-500 mb-4">
+                      Configure your alert preferences to stay informed about your baby's health needs, upcoming appointments, and medication schedules.
+                    </p>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <h4 className="font-medium text-blue-700 mb-2">Why configure alerts?</h4>
+                      <ul className="list-disc pl-5 text-sm text-blue-700 space-y-1">
+                        <li>Never miss important health appointments</li>
+                        <li>Receive reminders for medication schedules</li>
+                        <li>Get updates on your baby's development milestones</li>
+                        <li>Stay informed about vaccination schedules</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             </TabsContent>
           </Tabs>

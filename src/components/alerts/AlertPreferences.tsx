@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Bell, MessageSquare, Smartphone, Check } from 'lucide-react';
+import { Bell, MessageSquare, Smartphone, Check, Baby, Clock, Calendar } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,12 +12,15 @@ const AlertPreferences: React.FC = () => {
   const [preferences, setPreferences] = useState({
     sms: true,
     whatsapp: false,
-    pushNotification: true
+    pushNotification: true,
+    appointments: true,
+    medications: true,
+    milestones: false
   });
   
   const [phoneNumber, setPhoneNumber] = useState('');
   
-  const handleToggle = (channel: 'sms' | 'whatsapp' | 'pushNotification') => {
+  const handleToggle = (channel: keyof typeof preferences) => {
     setPreferences(prev => ({
       ...prev,
       [channel]: !prev[channel]
@@ -37,10 +40,10 @@ const AlertPreferences: React.FC = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Bell className="h-5 w-5 text-health-blue" />
-          Alert Preferences
+          Baby Health Alert Preferences
         </CardTitle>
         <CardDescription>
-          Choose how you'd like to receive important health alerts and reminders
+          Choose how you'd like to receive important health alerts and reminders for your baby
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -59,6 +62,7 @@ const AlertPreferences: React.FC = () => {
         </div>
         
         <div className="space-y-4">
+          <h4 className="font-medium text-sm text-gray-500 uppercase">Communication Channels</h4>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <MessageSquare className="h-4 w-4 text-gray-500" />
@@ -98,6 +102,49 @@ const AlertPreferences: React.FC = () => {
             <Switch 
               checked={preferences.pushNotification} 
               onCheckedChange={() => handleToggle('pushNotification')}
+            />
+          </div>
+
+          <h4 className="font-medium text-sm text-gray-500 uppercase pt-2">Alert Types</h4>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-gray-500" />
+              <div>
+                <p className="font-medium">Appointment Reminders</p>
+                <p className="text-sm text-gray-500">Checkup and vaccination appointments</p>
+              </div>
+            </div>
+            <Switch 
+              checked={preferences.appointments} 
+              onCheckedChange={() => handleToggle('appointments')}
+            />
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-gray-500" />
+              <div>
+                <p className="font-medium">Medication Reminders</p>
+                <p className="text-sm text-gray-500">Remind you when medications are due</p>
+              </div>
+            </div>
+            <Switch 
+              checked={preferences.medications} 
+              onCheckedChange={() => handleToggle('medications')}
+            />
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Baby className="h-4 w-4 text-gray-500" />
+              <div>
+                <p className="font-medium">Development Milestones</p>
+                <p className="text-sm text-gray-500">Updates on your baby's growth milestones</p>
+              </div>
+            </div>
+            <Switch 
+              checked={preferences.milestones} 
+              onCheckedChange={() => handleToggle('milestones')}
             />
           </div>
         </div>
